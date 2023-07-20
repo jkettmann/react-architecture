@@ -3,14 +3,15 @@
 import { useGetFeed } from "@/hooks/useGetFeed";
 import { ShoutList } from "@/components/shout-list";
 import { Image, User } from "@/types";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function Feed() {
   const feed = useGetFeed();
-  if (feed.isLoading || !feed.data) {
-    return <div>Loading...</div>;
-  }
   if (feed.isError) {
     return <div>An error occurred</div>;
+  }
+  if (!feed.data) {
+    return <LoadingSpinner />;
   }
   const users = feed.data.included.filter((u): u is User => u.type === "user");
   const images = feed.data.included.filter(

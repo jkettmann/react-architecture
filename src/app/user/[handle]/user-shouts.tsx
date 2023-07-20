@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { ShoutList } from "@/components/shout-list";
 import { useGetShoutsByUser } from "@/hooks/useGetShoutsByUser";
 import { useGetUser } from "@/hooks/useGetUser";
@@ -14,7 +15,7 @@ export function UserShouts({ handle }: UserShoutsProps) {
     return <div>An error occurred</div>;
   }
   if (!shouts.data || !user.data) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

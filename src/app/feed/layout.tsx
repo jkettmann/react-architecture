@@ -11,8 +11,10 @@ export default function FeedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col p-6 gap-6">
-      <h1 className="font-bold text-2xl">The world is a dark place!</h1>
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center p-6 gap-6">
+      <h1 className="font-bold text-2xl text-center">
+        The world is a dark place! Let&apos;s make it darker
+      </h1>
       {children}
     </div>
   );

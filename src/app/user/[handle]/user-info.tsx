@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { useGetUser } from "@/hooks/useGetUser";
 
 type UserInfoProps = {
@@ -11,7 +12,7 @@ export function UserInfo({ handle }: UserInfoProps) {
     return <div>An error occurred</div>;
   }
   if (!user.data) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -23,9 +24,9 @@ export function UserInfo({ handle }: UserInfoProps) {
         alt={`${user.data.data.attributes.handle}'s avatar`}
       />
       <div>
-        <h2 className="text-xl font-bold">
+        <h1 className="text-xl font-bold">
           @{user.data.data.attributes.handle}
-        </h2>
+        </h1>
         <p className="">
           {user.data.data.attributes.info || "Shush! I'm a ghost."}
         </p>

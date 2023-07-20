@@ -2,7 +2,7 @@ type UserId = string;
 type ShoutId = string;
 type ImageId = string;
 
-export type User = {
+export interface User {
   id: UserId;
   type: "user";
   attributes: {
@@ -10,9 +10,9 @@ export type User = {
     avatar: string;
     info?: string;
   };
-};
+}
 
-export type Shout = {
+export interface Shout {
   id: ShoutId;
   type: "shout";
   createdAt: number;
@@ -24,17 +24,17 @@ export type Shout = {
     reshouts: number;
     imageId?: ImageId;
   };
-};
+}
 
-export type Image = {
+export interface Image {
   id: ImageId;
   type: "image";
   attributes: {
     url: string;
   };
-};
+}
 
-export type ShoutsByUserResponse = {
+export interface ShoutsByUserResponse {
   data: Shout[];
   included: Image[];
-};
+}

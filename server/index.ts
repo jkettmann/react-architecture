@@ -1,3 +1,4 @@
+import { setTimeout } from "timers/promises";
 import Fastify, { FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import { DbFeedResponse } from "./types";
@@ -7,12 +8,18 @@ const fastify = Fastify({
   logger: true,
 });
 
+function waitRandomTime() {
+  const randomTime = Math.floor(Math.random() * 1000 + 500);
+  return setTimeout(randomTime);
+}
+
 async function start() {
   await fastify.register(cors, {
     origin: "http://localhost:3000",
   });
 
   fastify.get("/api/feed", async function handler() {
+    await waitRandomTime();
     const feedResponse: DbFeedResponse = {
       data: shouts,
       included: [...users, ...images],
@@ -26,6 +33,7 @@ async function start() {
       req: FastifyRequest<{ Params: { handle: string } }>,
       reply
     ) {
+      await waitRandomTime();
       const user = users.find((u) => u.attributes.handle === req.params.handle);
       if (!user) {
         return reply.status(404);
@@ -40,6 +48,7 @@ async function start() {
       req: FastifyRequest<{ Params: { handle: string } }>,
       reply
     ) {
+      await waitRandomTime();
       const user = users.find((u) => u.attributes.handle === req.params.handle);
       if (!user) {
         return reply.status(404);
