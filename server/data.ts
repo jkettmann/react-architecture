@@ -1,4 +1,4 @@
-import { DbFeedResponse, DbImage, DbShout, DbUser } from "./types";
+import { DbImage, DbShout, DbUser } from "./types";
 
 export const users: DbUser[] = [
   {
@@ -7,6 +7,7 @@ export const users: DbUser[] = [
     attributes: {
       handle: "darklord",
       avatar: "https://avatars.githubusercontent.com/u/4726921?v=4",
+      info: "I am the dark lord, the root of all evil. 'Tis I who brought the world to its knees. In blood I was born, and in blood I shall have my vengeance.",
     },
   },
   {

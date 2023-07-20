@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import Fastify, { FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import { DbFeedResponse } from "./types";
 import { shouts, users, images } from "./data";
@@ -19,6 +19,41 @@ async function start() {
     };
     return feedResponse;
   });
+
+  fastify.get(
+    "/api/user/:handle",
+    async function handler(
+      req: FastifyRequest<{ Params: { handle: string } }>,
+      reply
+    ) {
+      const user = users.find((u) => u.attributes.handle === req.params.handle);
+      if (!user) {
+        return reply.status(404);
+      }
+      return { data: user };
+    }
+  );
+
+  fastify.get(
+    "/api/user/:handle/shouts",
+    async function handler(
+      req: FastifyRequest<{ Params: { handle: string } }>,
+      reply
+    ) {
+      const user = users.find((u) => u.attributes.handle === req.params.handle);
+      if (!user) {
+        return reply.status(404);
+      }
+      const userShouts = shouts.filter(
+        (s) => s.attributes.authorId === user.id
+      );
+      const shoutImages = userShouts
+        .map((s) => s.attributes.imageId)
+        .filter((id): id is string => Boolean(id))
+        .map((imageId) => images.find((i) => i.id === imageId));
+      return { data: userShouts, included: shoutImages };
+    }
+  );
 
   try {
     await fastify.listen({ port: 3001 });

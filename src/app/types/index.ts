@@ -8,6 +8,7 @@ export type User = {
   attributes: {
     handle: string;
     avatar: string;
+    info?: string;
   };
 };
 
@@ -33,7 +34,7 @@ export type Image = {
   };
 };
 
-export type FeedResponse = {
+export type ShoutsByUserResponse = {
   data: Shout[];
-  included: (User | Image)[];
+  included: Image[];
 };

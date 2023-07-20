@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/api-client";
-import { FeedResponse } from "@/types";
+import { Image, Shout, User } from "@/types";
 
 async function getFeed() {
-  const res = await apiClient<FeedResponse>("/feed");
+  const res = await apiClient<{
+    data: Shout[];
+    included: (User | Image)[];
+  }>("/feed");
   return res.data;
 }
 

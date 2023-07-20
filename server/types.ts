@@ -8,6 +8,7 @@ export type DbUser = {
   attributes: {
     handle: string;
     avatar: string;
+    info?: string;
   };
 };
 
