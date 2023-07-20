@@ -3,22 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:client": "next dev",
+    "dev:server": "tsx watch server",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@fastify/cors": "^8.3.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@tanstack/react-query": "^4.29.25",
+    "@tanstack/react-query-devtools": "^4.29.25",
     "@types/node": "20.4.2",
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "fastify": "^4.20.0",
     "lucide-react": "^0.261.0",
     "next": "13.4.10",
     "postcss": "8.4.26",
@@ -28,5 +35,10 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.29.25",
+    "npm-run-all": "^4.1.5",
+    "tsx": "^3.12.7"
   }
 }

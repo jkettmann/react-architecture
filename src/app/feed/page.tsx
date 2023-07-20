@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from "react";
 import { User } from "@/types";
 import { Shout } from "@/components/shout";
+import { useGetFeed } from "@/hooks/useGetFeed";
 
 const defaultAuthor: User = {
   id: "invalid",
@@ -13,21 +16,20 @@ const defaultAuthor: User = {
 };
 
 export default function Feed() {
-  return (
-    <div className="flex flex-col p-6 gap-6">
-      {feedResponse.data.map((shout) => {
-        const author = feedResponse.included.find(
-          (item): item is User =>
-            item.type === "user" && item.id === shout.attributes.authorId
-        );
-        return (
-          <Shout
-            key={shout.id}
-            shout={shout}
-            author={author ?? defaultAuthor}
-          />
-        );
-      })}
-    </div>
-  );
+  const feed = useGetFeed();
+  if (feed.isLoading || !feed.data) {
+    return <div>Loading...</div>;
+  }
+  if (feed.isError) {
+    return <div>An error occurred</div>;
+  }
+  return feed.data.data.map((shout) => {
+    const author = feed.data.included.find(
+      (item): item is User =>
+        item.type === "user" && item.id === shout.attributes.authorId
+    );
+    return (
+      <Shout key={shout.id} shout={shout} author={author ?? defaultAuthor} />
+    );
+  });
 }
