@@ -1,6 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "plugin:import/recommended"],
   "rules": {
-    "import/order": "error"
+    "import/order": "error",
+    "import/no-unresolved": "off"
   }
 }
