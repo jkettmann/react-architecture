@@ -4,7 +4,6 @@ import util from "util";
 import { pipeline } from "stream";
 import path from "path";
 import Fastify, { FastifyRequest } from "fastify";
-import cors from "@fastify/cors";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
@@ -296,10 +295,6 @@ fastify.post(
 );
 
 async function start() {
-  await fastify.register(cors, {
-    origin: "http://localhost:3000",
-  });
-
   try {
     await fastify.listen({ port: 3001 });
   } catch (err) {

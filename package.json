@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@fastify/cookie": "^8.3.0",
-    "@fastify/cors": "^8.3.0",
     "@fastify/multipart": "^7.7.1",
     "@fastify/static": "^6.10.2",
     "@radix-ui/react-slot": "^1.0.2",
