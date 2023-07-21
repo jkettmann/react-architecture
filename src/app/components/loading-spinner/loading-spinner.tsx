@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BloodDrop } from "./blood-drop";
 
 type LoadingSpinnerProps = {};

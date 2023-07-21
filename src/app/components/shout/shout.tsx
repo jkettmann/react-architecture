@@ -2,6 +2,7 @@ import * as React from "react";
 import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shout, User } from "@/types";
+import { ReplyDialog } from "./reply-dialog";
 
 type ShoutProps = {
   shout: Shout;
@@ -32,11 +34,12 @@ export function Shout({ shout, author = defaultAuthor }: ShoutProps) {
     <Card key={shout.id} className="w-full">
       <Link href={`/user/${author.attributes.handle}`}>
         <CardHeader className="pb-2 flex-row gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
+            className="rounded-full"
             src={author.attributes.avatar}
             alt={author.attributes.handle}
-            className="w-8 h-8 rounded-full"
+            width={32}
+            height={32}
           />
           <span className="font-semibold">
             {`@${author.attributes.handle}`}
@@ -53,10 +56,12 @@ export function Shout({ shout, author = defaultAuthor }: ShoutProps) {
         <CardDescription>{shout.attributes.text}</CardDescription>
       </CardContent>
       <CardFooter className="flex justify-between p-3 border-t-neutral-300">
-        <Button variant="ghost" size="sm" className="gap-2">
-          <MessageCircle className="h-4 w-4" />
-          {shout.attributes.replies}
-        </Button>
+        <ReplyDialog>
+          <Button variant="ghost" size="sm" className="gap-2">
+            <MessageCircle className="h-4 w-4" />
+            {shout.relationships.replies.length}
+          </Button>
+        </ReplyDialog>
         <Button variant="ghost" size="sm" className="gap-2">
           <Heart className="h-4 w-4" />
           {shout.attributes.likes}

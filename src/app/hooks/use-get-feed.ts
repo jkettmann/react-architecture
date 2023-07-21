@@ -13,7 +13,7 @@ async function getFeed() {
 export function useGetFeed() {
   const query = useQuery({
     queryKey: ["feed"],
-    queryFn: getFeed,
+    queryFn: () => getFeed(),
   });
   return query;
 }

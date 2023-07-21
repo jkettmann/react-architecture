@@ -7,7 +7,14 @@ import Fastify, { FastifyRequest } from "fastify";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
-import { DbFeedResponse, DbImage, DbShout, DbUser } from "./types";
+import {
+  DbFeedResponse,
+  DbImage,
+  DbShout,
+  DbUser,
+  MeDto,
+  UserDto,
+} from "./types";
 import { shouts, users, images } from "./data";
 
 const pump = util.promisify(pipeline);
@@ -50,23 +57,38 @@ function getUserFromCookie(cookies: Record<string, string | undefined>) {
   if (!handle) {
     return null;
   }
-  return users.find((u) => u.attributes.handle === handle) || null;
+  const user = users.find((u) => u.attributes.handle === handle) || null;
+  if (!user) {
+    return null;
+  }
+  const meDto: MeDto = {
+    ...user,
+    relationships: {
+      followerIds: users
+        .filter((u) => u.attributes.followsUserIds.includes(user.id))
+        .map((u) => u.id),
+    },
+  };
+  return meDto;
 }
 
 function prepareUserForMe(user: DbUser, me: DbUser | null) {
-  if (!me) {
-    return user;
-  }
-  return {
+  let userDto: UserDto = {
     ...user,
-    relationships: {
-      ...user.relationships,
-      data: {
+    relationships: {} as UserDto["relationships"],
+  };
+  if (!me) {
+    return userDto;
+  }
+  userDto.relationships = {
+    me: {
+      attributes: {
         isBlocked: user.attributes.blockedUserIds.includes(me.id),
         isFollowing: user.attributes.followsUserIds.includes(me.id),
       },
     },
   };
+  return userDto;
 }
 
 function prepareUsersForMe(users: DbUser[], me: DbUser | null) {
@@ -94,7 +116,7 @@ fastify.get(
     await waitRandomTime();
     const user = users.find((u) => u.attributes.handle === req.params.handle);
     if (!user) {
-      return reply.status(404);
+      return reply.status(404).send({ error: true });
     }
     const me = getUserFromCookie(req.cookies);
     return { data: prepareUserForMe(user, me) };
@@ -111,7 +133,7 @@ fastify.get(
     await waitRandomTime();
     const user = users.find((u) => u.attributes.handle === req.params.handle);
     if (!user) {
-      return reply.status(404);
+      return reply.status(404).send({ error: true });
     }
     const userShouts = shouts.filter((s) => s.attributes.authorId === user.id);
     const shoutImages = userShouts
@@ -126,22 +148,25 @@ fastify.get(
 fastify.post(
   "/api/login",
   async function handler(
-    req: FastifyRequest<{ Body: { handle: string; password: string } }>,
+    req: FastifyRequest<{ Body: { username: string; password: string } }>,
     reply
   ) {
     await waitRandomTime();
-    const { handle } = req.body;
+    const { username: handle } = req.body;
 
-    if (handle === "prettypinkpony") {
+    if (users.find((u) => u.attributes.handle === handle)) {
       const token = Buffer.from(handle).toString("base64");
-      reply.status(200).setCookie("token", token, {
-        path: "/",
-        signed: true,
-        httpOnly: true,
-      });
+      reply
+        .status(200)
+        .setCookie("token", token, {
+          path: "/",
+          signed: true,
+          httpOnly: true,
+        })
+        .send({ ok: true });
     }
 
-    return reply.status(401);
+    return reply.status(401).send({ error: true });
   }
 );
 
@@ -149,17 +174,17 @@ fastify.post(
 fastify.post("/api/logout", async function handler(req, reply) {
   await waitRandomTime();
   reply.clearCookie("token", { path: "/" });
-  return reply.status(200);
+  return reply.status(200).send({ ok: true });
 });
 
 // me
-fastify.get("/api/me", async function handler(req, reply) {
+fastify.get("/api/me", async function handler(req) {
   await waitRandomTime();
-  const user = getUserFromCookie(req.cookies);
-  if (!user) {
-    return reply.status(401);
+  const me = getUserFromCookie(req.cookies);
+  if (!me) {
+    return { data: null };
   }
-  return { data: user };
+  return { data: me };
 });
 
 // image upload
@@ -167,13 +192,13 @@ fastify.post("/api/image", async function handler(req, reply) {
   await waitRandomTime();
   const user = getUserFromCookie(req.cookies);
   if (!user) {
-    return reply.status(401);
+    return reply.status(401).send({ error: true });
   }
 
   const allowedFileTypes = ["image/jpeg", "image/png", "image/gif"];
   const data = await req.file();
   if (!data || !allowedFileTypes.includes(data.mimetype)) {
-    return reply.status(400);
+    return reply.status(400).send({ error: true });
   }
 
   const filename = `${images.length + 1}-${data.filename}`;
@@ -203,7 +228,7 @@ fastify.post(
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
     if (!user) {
-      return reply.status(401);
+      return reply.status(401).send({ error: true });
     }
     const shout: DbShout = {
       id: `shout-${shouts.length + 1}`,
@@ -238,12 +263,12 @@ fastify.post(
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
     if (!user) {
-      return reply.status(401);
+      return reply.status(401).send({ error: true });
     }
     const shout = shouts.find((s) => s.id === req.params.shoutId);
     const replyShout = shouts.find((s) => s.id === req.body.replyId);
     if (!shout || !replyShout) {
-      return reply.status(404);
+      return reply.status(404).send({ error: true });
     }
     shout.relationships.replies.push(replyShout.id);
     // add replyTo field to the shout entity
@@ -262,11 +287,11 @@ fastify.post(
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
     if (!user) {
-      return reply.status(401);
+      return reply.status(401).send({ error: true });
     }
     const shout = shouts.find((s) => s.id === req.params.shoutId);
     if (!shout) {
-      return reply.status(404);
+      return reply.status(404).send({ error: true });
     }
     shout.attributes.likes += 1;
     return { data: shout };
@@ -283,11 +308,11 @@ fastify.post(
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
     if (!user) {
-      return reply.status(401);
+      return reply.status(401).send({ error: true });
     }
     const shout = shouts.find((s) => s.id === req.params.shoutId);
     if (!shout) {
-      return reply.status(404);
+      return reply.status(404).send({ error: true });
     }
     shout.attributes.reshouts += 1;
     return { data: shout };

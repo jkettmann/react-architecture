@@ -1,5 +1,5 @@
 import { LoadingSpinner } from "@/components/loading-spinner";
-import { useGetUser } from "@/hooks/useGetUser";
+import { useGetUser } from "@/hooks/use-get-user";
 
 type UserInfoProps = {
   handle: string;

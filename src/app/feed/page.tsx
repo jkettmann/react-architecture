@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetFeed } from "@/hooks/useGetFeed";
+import { useGetFeed } from "@/hooks/use-get-feed";
 import { ShoutList } from "@/components/shout-list";
 import { Image, User } from "@/types";
 import { LoadingSpinner } from "@/components/loading-spinner";

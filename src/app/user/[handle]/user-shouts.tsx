@@ -1,7 +1,7 @@
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { ShoutList } from "@/components/shout-list";
-import { useGetShoutsByUser } from "@/hooks/useGetShoutsByUser";
-import { useGetUser } from "@/hooks/useGetUser";
+import { useGetShoutsByUser } from "@/hooks/use-get-shouts-by-user";
+import { useGetUser } from "@/hooks/use-get-user";
 
 type UserShoutsProps = {
   handle: string;

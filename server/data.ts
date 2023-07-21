@@ -11,7 +11,6 @@ export const users: DbUser[] = [
       blockedUserIds: ["user-2"],
       followsUserIds: ["user-3"],
     },
-    relationships: {},
   },
   {
     id: "user-2",
@@ -23,7 +22,6 @@ export const users: DbUser[] = [
       blockedUserIds: ["user-1"],
       followsUserIds: ["user-3"],
     },
-    relationships: {},
   },
   {
     id: "user-3",
@@ -34,7 +32,6 @@ export const users: DbUser[] = [
       blockedUserIds: [],
       followsUserIds: ["user-1", "user-2"],
     },
-    relationships: {},
   },
 ];
 

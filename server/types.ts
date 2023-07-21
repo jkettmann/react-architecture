@@ -12,9 +12,12 @@ export interface DbUser {
     blockedUserIds: UserId[];
     followsUserIds: UserId[];
   };
+}
+
+export interface UserDto extends DbUser {
   relationships: {
     me?: {
-      data: {
+      attributes: {
         isBlocked: boolean;
         isFollowing: boolean;
       };
@@ -22,8 +25,10 @@ export interface DbUser {
   };
 }
 
-export interface DbMe extends DbUser {
-  attributes: DbUser["attributes"] & {};
+export interface MeDto extends DbUser {
+  relationships: {
+    followerIds: UserId[];
+  };
 }
 
 export interface DbShout {

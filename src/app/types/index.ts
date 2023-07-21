@@ -12,6 +12,12 @@ export interface User {
   };
 }
 
+export interface Me extends User {
+  relationships: {
+    followerIds: UserId[];
+  };
+}
+
 export interface Shout {
   id: ShoutId;
   type: "shout";
@@ -19,10 +25,13 @@ export interface Shout {
   attributes: {
     authorId: UserId;
     text: string;
-    replies: number;
     likes: number;
     reshouts: number;
     imageId?: ImageId;
+  };
+  relationships: {
+    replies: ShoutId[];
+    replyTo?: ShoutId;
   };
 }
 

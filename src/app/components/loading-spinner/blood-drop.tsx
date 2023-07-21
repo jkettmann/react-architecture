@@ -23,8 +23,8 @@ export function BloodDrop({
           gradientUnits="userSpaceOnUse"
         />
         <linearGradient id="a">
-          <stop offset="0" stop-color="#b00000" stop-opacity="0" />
-          <stop offset="1" stop-color="#b00000" />
+          <stop offset="0" stopColor="#b00000" stopOpacity="0" />
+          <stop offset="1" stopColor="#b00000" />
         </linearGradient>
         <filter
           id="c"
@@ -32,7 +32,7 @@ export function BloodDrop({
           height="1.1264681"
           x="-.19924036"
           y="-.06323403"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
           <feGaussianBlur stdDeviation="1.4048842" />
         </filter>
