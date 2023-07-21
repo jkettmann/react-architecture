@@ -2,39 +2,56 @@ type UserId = string;
 type ShoutId = string;
 type ImageId = string;
 
-export type DbUser = {
+export interface DbUser {
   id: UserId;
   type: "user";
   attributes: {
     handle: string;
     avatar: string;
     info?: string;
+    blockedUserIds: UserId[];
+    followsUserIds: UserId[];
   };
-};
+  relationships: {
+    me?: {
+      data: {
+        isBlocked: boolean;
+        isFollowing: boolean;
+      };
+    };
+  };
+}
 
-export type DbShout = {
+export interface DbMe extends DbUser {
+  attributes: DbUser["attributes"] & {};
+}
+
+export interface DbShout {
   id: ShoutId;
   type: "shout";
   createdAt: number;
   attributes: {
     authorId: UserId;
     text: string;
-    replies: number;
     likes: number;
     reshouts: number;
     imageId?: ImageId;
   };
-};
+  relationships: {
+    replies: ShoutId[];
+    replyTo?: ShoutId;
+  };
+}
 
-export type DbImage = {
+export interface DbImage {
   id: ImageId;
   type: "image";
   attributes: {
     url: string;
   };
-};
+}
 
-export type DbFeedResponse = {
+export interface DbFeedResponse {
   data: DbShout[];
   included: (DbUser | DbImage)[];
-};
+}

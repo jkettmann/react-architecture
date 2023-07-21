@@ -6,17 +6,35 @@ export const users: DbUser[] = [
     type: "user",
     attributes: {
       handle: "darklord",
-      avatar: "https://avatars.githubusercontent.com/u/4726921?v=4",
+      avatar: "/cdn/avatars/darklord.jpeg",
       info: "I am the dark lord, the root of all evil. 'Tis I who brought the world to its knees. In blood I was born, and in blood I shall have my vengeance.",
+      blockedUserIds: ["user-2"],
+      followsUserIds: ["user-3"],
     },
+    relationships: {},
   },
   {
     id: "user-2",
     type: "user",
     attributes: {
       handle: "prettypinkpony",
-      avatar: "https://avatars.githubusercontent.com/u/4726921?v=4",
+      avatar: "/cdn/avatars/prettypinkpony.jpeg",
+      info: "I like colors. I'm a colorful person (although I'm pretty white *giggles*). I'd like to make this world a better place. And sometimes I feel like the only one who can...",
+      blockedUserIds: ["user-1"],
+      followsUserIds: ["user-3"],
     },
+    relationships: {},
+  },
+  {
+    id: "user-3",
+    type: "user",
+    attributes: {
+      handle: "fcku",
+      avatar: "/cdn/avatars/fcku.jpeg",
+      blockedUserIds: [],
+      followsUserIds: ["user-1", "user-2"],
+    },
+    relationships: {},
   },
 ];
 
@@ -28,9 +46,11 @@ export const shouts: DbShout[] = [
     attributes: {
       authorId: "user-1",
       text: "The world sucks!!!!",
-      replies: 2,
-      likes: 1000,
-      reshouts: 666,
+      likes: 5,
+      reshouts: 0,
+    },
+    relationships: {
+      replies: ["shout-3"],
     },
   },
   {
@@ -38,11 +58,13 @@ export const shouts: DbShout[] = [
     type: "shout",
     createdAt: Date.now() - 6378126,
     attributes: {
-      authorId: "user-1",
+      authorId: "user-3",
       text: "The world sucks!!!!",
-      replies: 30,
       likes: 1000,
       reshouts: 666,
+    },
+    relationships: {
+      replies: [],
     },
   },
   {
@@ -52,9 +74,11 @@ export const shouts: DbShout[] = [
     attributes: {
       authorId: "user-2",
       text: "You suck @darklord!!!!",
-      replies: 100,
       likes: 1000,
       reshouts: 666,
+    },
+    relationships: {
+      replies: ["shout-4"],
     },
   },
   {
@@ -64,9 +88,11 @@ export const shouts: DbShout[] = [
     attributes: {
       authorId: "user-1",
       text: "The world sucks!!!!",
-      replies: 2,
       likes: 1000,
       reshouts: 666,
+    },
+    relationships: {
+      replies: [],
     },
   },
 ];
