@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,47 +9,93 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { LoginDialog } from "@/components/login-dialog";
 import { useGetMe } from "@/hooks/use-get-me";
+import { useUploadImage } from "@/hooks/use-upload-image";
+import { useCreateShout } from "@/hooks/use-create-shout";
+import { useCreateShoutReply } from "@/hooks/use-create-shout-reply";
 
-type ReplyDialogProps = { children: React.ReactNode };
+interface ReplyFormElements extends HTMLFormControlsCollection {
+  message: HTMLTextAreaElement;
+  image: HTMLInputElement;
+}
 
-export function ReplyDialog({ children }: ReplyDialogProps) {
+interface ReplyForm extends HTMLFormElement {
+  readonly elements: ReplyFormElements;
+}
+
+interface ReplyDialogProps {
+  children: React.ReactNode;
+  shoutId: string;
+}
+
+export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
+  const [open, setOpen] = useState(false);
   const me = useGetMe();
+  const uploadImage = useUploadImage();
+  const createShout = useCreateShout();
+  const createShoutReply = useCreateShoutReply();
 
   if (me.isError || !me.data?.data) {
     return <LoginDialog>{children}</LoginDialog>;
   }
 
+  async function handleSubmit(event: React.FormEvent<ReplyForm>) {
+    event.preventDefault();
+    const message = event.currentTarget.elements.message.value;
+    const files = event.currentTarget.elements.image.files;
+    let imageId = undefined;
+    if (files?.length) {
+      const formData = new FormData();
+      formData.append("image", files[0]);
+      const image = await uploadImage.mutateAsync(formData);
+      imageId = image.data.id;
+    }
+    const newShout = await createShout.mutateAsync({ message, imageId });
+    await createShoutReply.mutateAsync({ shoutId, replyId: newShout.data.id });
+    setOpen(false);
+  }
+
+  const isLoading =
+    uploadImage.isLoading ||
+    createShout.isLoading ||
+    createShoutReply.isLoading;
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Shout out loud!</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Shout out your darkest thoughts to the world.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <Label className="space-y-2">
+              <span>Message *</span>
+              <Textarea
+                className="col-span-3"
+                name="message"
+                placeholder="Message"
+                required
+              />
             </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
+            <Label className="space-y-2">
+              <span>Image (optional)</span>
+              <Input className="col-span-3" name="image" type="file" />
             </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
           </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              Shout out!
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

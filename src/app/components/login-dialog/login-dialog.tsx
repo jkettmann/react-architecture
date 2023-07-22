@@ -21,7 +21,9 @@ interface LoginForm extends HTMLFormElement {
   readonly elements: LoginFormElements;
 }
 
-type LoginDialogProps = { children: React.ReactNode };
+interface LoginDialogProps {
+  children: React.ReactNode;
+}
 
 export function LoginDialog({ children }: LoginDialogProps) {
   const login = useLogin();
@@ -53,6 +55,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
                 name="username"
                 placeholder="Username"
                 defaultValue="prettypinkpony"
+                required
               />
             </Label>
             <Label className="space-y-2">
@@ -63,6 +66,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
                 placeholder="Password"
                 defaultValue="12345678"
                 type="password"
+                required
               />
             </Label>
           </div>

@@ -189,7 +189,6 @@ fastify.get("/api/me", async function handler(req) {
 
 // image upload
 fastify.post("/api/image", async function handler(req, reply) {
-  await waitRandomTime();
   const user = getUserFromCookie(req.cookies);
   if (!user) {
     return reply.status(401).send({ error: true });
@@ -203,7 +202,7 @@ fastify.post("/api/image", async function handler(req, reply) {
 
   const filename = `${images.length + 1}-${data.filename}`;
   const storedFile = fs.createWriteStream(
-    path.join(__dirname, "public", filename)
+    path.join(__dirname, "public/shouts", filename)
   );
   await pump(data.file, storedFile);
 
@@ -211,7 +210,7 @@ fastify.post("/api/image", async function handler(req, reply) {
     id: `image-${images.length + 1}`,
     type: "image",
     attributes: {
-      url: `/cdn/images/${filename}`,
+      url: `/cdn/shouts/${filename}`,
     },
   };
   images.push(image);
@@ -222,11 +221,12 @@ fastify.post("/api/image", async function handler(req, reply) {
 fastify.post(
   "/api/shout",
   async function handler(
-    req: FastifyRequest<{ Body: { text: string; imageId?: string } }>,
+    req: FastifyRequest<{ Body: { message: string; imageId?: string } }>,
     reply
   ) {
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
+    console.log(user);
     if (!user) {
       return reply.status(401).send({ error: true });
     }
@@ -236,7 +236,7 @@ fastify.post(
       createdAt: Date.now(),
       attributes: {
         authorId: user.id,
-        text: req.body.text,
+        text: req.body.message,
         likes: 0,
         reshouts: 0,
         imageId: req.body.imageId,
@@ -245,7 +245,8 @@ fastify.post(
         replies: [] as string[],
       },
     };
-    shouts.push(shout);
+    console.log(shout);
+    shouts.unshift(shout);
     return { data: shout };
   }
 );

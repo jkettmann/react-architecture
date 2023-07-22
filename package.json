@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
     "dev:client": "next dev",
-    "dev:server": "tsx watch server",
+    "dev:server": "tsx watch --ignore server/public server",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

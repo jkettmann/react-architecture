@@ -3,6 +3,7 @@ import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Image from "next/image";
+import { ReplyDialog } from "./reply-dialog";
 import {
   Card,
   CardContent,
@@ -11,12 +12,12 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shout, User } from "@/types";
-import { ReplyDialog } from "./reply-dialog";
+import { Image as IImage, Shout, User } from "@/types";
 
 type ShoutProps = {
   shout: Shout;
   author?: User;
+  image?: IImage;
 };
 
 const defaultAuthor: User = {
@@ -29,7 +30,7 @@ const defaultAuthor: User = {
   },
 };
 
-export function Shout({ shout, author = defaultAuthor }: ShoutProps) {
+export function Shout({ shout, author = defaultAuthor, image }: ShoutProps) {
   return (
     <Card key={shout.id} className="w-full">
       <Link href={`/user/${author.attributes.handle}`}>
@@ -54,9 +55,18 @@ export function Shout({ shout, author = defaultAuthor }: ShoutProps) {
       </Link>
       <CardContent>
         <CardDescription>{shout.attributes.text}</CardDescription>
+        {image && (
+          <Image
+            className="mt-4"
+            src={image.attributes.url}
+            alt=""
+            width={350}
+            height={200}
+          />
+        )}
       </CardContent>
       <CardFooter className="flex justify-between p-3 border-t-neutral-300">
-        <ReplyDialog>
+        <ReplyDialog shoutId={shout.id}>
           <Button variant="ghost" size="sm" className="gap-2">
             <MessageCircle className="h-4 w-4" />
             {shout.relationships.replies.length}
