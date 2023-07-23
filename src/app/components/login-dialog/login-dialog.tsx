@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,17 +27,19 @@ interface LoginDialogProps {
 }
 
 export function LoginDialog({ children }: LoginDialogProps) {
+  const [open, setOpen] = useState(false);
   const login = useLogin();
 
-  function handleSubmit(event: React.FormEvent<LoginForm>) {
+  async function handleSubmit(event: React.FormEvent<LoginForm>) {
     event.preventDefault();
     const username = event.currentTarget.elements.username.value;
     const password = event.currentTarget.elements.password.value;
-    login.mutate({ username, password });
+    await login.mutateAsync({ username, password });
+    setOpen(false);
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
