@@ -1,6 +1,3 @@
-"use client";
-
-import * as React from "react";
 import { User, Shout as TShout, Image } from "@/types";
 import { Shout } from "@/components/shout";
 

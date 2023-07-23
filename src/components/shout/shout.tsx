@@ -1,8 +1,5 @@
-import * as React from "react";
 import { Heart, Repeat2, MessageCircle } from "lucide-react";
-import Link from "next/link";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import Image from "next/image";
 import { ReplyDialog } from "./reply-dialog";
 import {
   Card,
@@ -12,10 +9,11 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Image as IImage, Shout, User } from "@/types";
+import { Image as IImage, Shout as IShout, User } from "@/types";
+import { Link } from "react-router-dom";
 
 type ShoutProps = {
-  shout: Shout;
+  shout: IShout;
   author?: User;
   image?: IImage;
 };
@@ -33,14 +31,12 @@ const defaultAuthor: User = {
 export function Shout({ shout, author = defaultAuthor, image }: ShoutProps) {
   return (
     <Card key={shout.id} className="w-full">
-      <Link href={`/user/${author.attributes.handle}`}>
+      <Link to={`/user/${author.attributes.handle}`}>
         <CardHeader className="pb-2 flex-row gap-2">
-          <Image
-            className="rounded-full"
+          <img
+            className="w-8 h-8 rounded-full"
             src={author.attributes.avatar}
             alt={author.attributes.handle}
-            width={32}
-            height={32}
           />
           <span className="font-semibold">
             {`@${author.attributes.handle}`}
@@ -56,12 +52,11 @@ export function Shout({ shout, author = defaultAuthor, image }: ShoutProps) {
       <CardContent>
         <CardDescription>{shout.attributes.text}</CardDescription>
         {image && (
-          <Image
-            className="mt-4"
+          <img
+            className="mt-4 object-contain"
+            style={{ width: 350, maxHeight: 200 }}
             src={image.attributes.url}
             alt=""
-            width={350}
-            height={200}
           />
         )}
       </CardContent>

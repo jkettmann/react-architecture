@@ -7,6 +7,7 @@ import Fastify, { FastifyRequest } from "fastify";
 import cookie, { FastifyCookieOptions } from "@fastify/cookie";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
+import { fileURLToPath } from "url";
 import {
   DbFeedResponse,
   DbImage,
@@ -16,6 +17,9 @@ import {
   UserDto,
 } from "./types";
 import { shouts, users, images } from "./data";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const pump = util.promisify(pipeline);
 
@@ -226,7 +230,6 @@ fastify.post(
   ) {
     await waitRandomTime();
     const user = getUserFromCookie(req.cookies);
-    console.log(user);
     if (!user) {
       return reply.status(401).send({ error: true });
     }
@@ -245,7 +248,6 @@ fastify.post(
         replies: [] as string[],
       },
     };
-    console.log(shout);
     shouts.unshift(shout);
     return { data: shout };
   }

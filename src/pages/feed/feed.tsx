@@ -1,11 +1,9 @@
-"use client";
-
 import { useGetFeed } from "@/hooks/use-get-feed";
 import { ShoutList } from "@/components/shout-list";
 import { Image, User } from "@/types";
 import { LoadingSpinner } from "@/components/loading-spinner";
 
-export default function Feed() {
+export function Feed() {
   const feed = useGetFeed();
   if (feed.isError) {
     return <div>An error occurred</div>;
@@ -17,5 +15,9 @@ export default function Feed() {
   const images = feed.data.included.filter(
     (i): i is Image => i.type === "image"
   );
-  return <ShoutList shouts={feed.data.data} users={users} images={images} />;
+  return (
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center p-6 gap-6">
+      <ShoutList shouts={feed.data.data} users={users} images={images} />
+    </div>
+  );
 }

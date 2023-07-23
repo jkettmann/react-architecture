@@ -1,6 +1,3 @@
-"use client";
-
-import Image from "next/image";
 import { useGetMe } from "@/hooks/use-get-me";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
@@ -28,12 +25,10 @@ export function Header() {
   return (
     <div className="w-full flex justify-between p-2">
       <div className="flex items-center gap-2">
-        <Image
-          className="rounded-full"
+        <img
+          className="w-8 h-8 rounded-full"
           src={me.data.data.attributes.avatar}
           alt={me.data.data.attributes.handle}
-          width={36}
-          height={36}
         />
         <span className="font-semibold">{`@${me.data.data.attributes.handle}`}</span>
       </div>
