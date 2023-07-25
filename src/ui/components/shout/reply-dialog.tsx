@@ -47,13 +47,9 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
     event.preventDefault();
     const message = event.currentTarget.elements.message.value;
     const files = event.currentTarget.elements.image.files;
-    let imageId = undefined;
-    if (files?.length) {
-      const formData = new FormData();
-      formData.append("image", files[0]);
-      const image = await uploadImage.mutateAsync(formData);
-      imageId = image.data.id;
-    }
+    const imageId = files?.length
+      ? await uploadImage.mutateAsync(files[0])
+      : undefined;
     const replyId = await createShout.mutateAsync({ message, imageId });
     await createShoutReply.mutateAsync({ shoutId, replyId });
     setOpen(false);
