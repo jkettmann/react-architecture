@@ -1,4 +1,7 @@
 import { User } from "@/domain/user";
-import { GetUserApi } from "./user.interfaces";
+import { GetUserApi, GetUserParams } from "./user.interfaces";
 
-export function getUser(api: GetUserApi, handle: string): Promise<User> {}
+export function getUser(
+  api: GetUserApi,
+  params: GetUserParams
+): Promise<User> {}

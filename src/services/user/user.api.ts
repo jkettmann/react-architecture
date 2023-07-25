@@ -1,9 +1,7 @@
 import { apiClient } from "@/services/api-client";
-import { UserDto } from "./user.interfaces";
+import { GetUserApi, GetUserParams, GetUserDto } from "./user.interfaces";
 
-export async function getUser(handle: string) {
-  const res = await apiClient<{
-    data: UserDto;
-  }>(`/user/${handle}`);
+export const getUser: GetUserApi = async (params: GetUserParams) => {
+  const res = await apiClient<GetUserDto>(`/user/${params.handle}`);
   return res.data;
-}
+};
