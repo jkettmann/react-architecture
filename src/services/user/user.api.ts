@@ -1,4 +1,4 @@
-import { apiClient } from "@/ui/api-client";
+import { apiClient } from "@/services/api-client";
 
 async function getUser(handle: string) {
   const res = await apiClient<{

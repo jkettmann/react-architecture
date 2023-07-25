@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { apiClient } from "@/ui/api-client";
+import { apiClient } from "@/services/api-client";
 import { Image } from "@/ui/types";
 
 async function uploadImage(formData: FormData) {

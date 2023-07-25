@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/ui/api-client";
+import { apiClient } from "@/services/api-client";
 
 interface Credentials {
   username: string;

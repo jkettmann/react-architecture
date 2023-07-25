@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/ui/api-client";
+import { apiClient } from "@/services/api-client";
 import { User } from "@/ui/types";
 
 async function getUser(handle: string) {

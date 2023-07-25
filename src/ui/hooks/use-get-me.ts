@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/ui/api-client";
+import { apiClient } from "@/services/api-client";
 import { Me } from "@/ui/types";
 
 const ONE_HOUR = 1000 * 60 * 60;
