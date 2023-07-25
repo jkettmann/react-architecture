@@ -1,4 +1,4 @@
-export type UserId = string;
+export type UserId = Flavor<string, "UserId">;
 
 export interface User {
   id: UserId;

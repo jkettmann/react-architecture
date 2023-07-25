@@ -1,7 +1,7 @@
 import { Image } from "@/ui/types";
 import { User } from "./user";
 
-type ShoutId = string;
+export type ShoutId = Flavor<string, "ShoutId">;
 
 export interface Shout {
   id: ShoutId;

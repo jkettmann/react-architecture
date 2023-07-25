@@ -1,4 +1,4 @@
-type ImageId = string;
+export type ImageId = Flavor<string, "ImageId">;
 
 export interface Image {
   id: ImageId;
