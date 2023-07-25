@@ -9,3 +9,5 @@ export interface UserDto {
     info?: string;
   };
 }
+
+export type GetUserApi = (handle: string) => Promise<UserDto>;
