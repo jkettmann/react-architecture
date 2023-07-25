@@ -1,2 +1,2 @@
-export { createReply } from "./shout.service";
-export type { CreateReplyParams } from "./shout.interfaces";
+export { createReply, createShout } from "./shout.service";
+export type { CreateReplyParams, CreateShoutParams } from "./shout.interfaces";

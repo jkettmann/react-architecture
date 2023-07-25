@@ -1,6 +1,11 @@
 import { apiClient } from "@/services/api-client";
-import { CreateReplyParams } from "./shout.interfaces";
+import { CreateReplyApi, CreateShoutApi } from "./shout.interfaces";
 
-export async function postReply({ shoutId, replyId }: CreateReplyParams) {
+export const createReply: CreateReplyApi = async ({ shoutId, replyId }) => {
   await apiClient.post(`/shout/${shoutId}/reply`, { replyId });
-}
+};
+
+export const createShout: CreateShoutApi = async (params) => {
+  const res = await apiClient.post(`/shout`, params);
+  return res.data;
+};

@@ -54,8 +54,8 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
       const image = await uploadImage.mutateAsync(formData);
       imageId = image.data.id;
     }
-    const newShout = await createShout.mutateAsync({ message, imageId });
-    await createShoutReply.mutateAsync({ shoutId, replyId: newShout.data.id });
+    const replyId = await createShout.mutateAsync({ message, imageId });
+    await createShoutReply.mutateAsync({ shoutId, replyId });
     setOpen(false);
   }
 
