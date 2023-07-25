@@ -24,8 +24,8 @@ export function UserProfile() {
 
   return (
     <div className="max-w-2xl w-full mx-auto flex flex-col p-6 gap-6">
-      <UserInfo user={user.data.data} />
-      <UserShouts user={user.data.data} />
+      <UserInfo user={user.data} />
+      <UserShouts user={user.data} />
     </div>
   );
 }

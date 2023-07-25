@@ -1,7 +1,7 @@
 import { User } from "@/domain/user";
 import { GetUserApi, GetUserDto, GetUserParams } from "./user.interfaces";
 
-function dtoToEntity(dto: GetUserDto): User {
+export function dtoToEntity(dto: GetUserDto): User {
   return {
     id: dto.data.id,
     type: dto.data.type,
