@@ -1,18 +1,9 @@
+import { CreateReplyParams, createReply } from "@/services/shout";
 import { useMutation } from "@tanstack/react-query";
-import { apiClient } from "@/services/api-client";
-
-interface ReplyInput {
-  shoutId: string;
-  replyId: string;
-}
-
-async function createShoutReply({ shoutId, replyId }: ReplyInput) {
-  await apiClient.post(`/shout/${shoutId}/reply`, { replyId });
-}
 
 export function useCreateShoutReply() {
-  const mutation = useMutation<void, unknown, ReplyInput>({
-    mutationFn: (input) => createShoutReply(input),
+  const mutation = useMutation<void, unknown, CreateReplyParams>({
+    mutationFn: (input) => createReply(input),
   });
   return mutation;
 }
