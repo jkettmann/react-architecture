@@ -1,8 +1,9 @@
 import { apiClient } from "@/services/api-client";
+import { UserDto } from "./user.interfaces";
 
-async function getUser(handle: string) {
+export async function getUser(handle: string) {
   const res = await apiClient<{
-    data: User;
+    data: UserDto;
   }>(`/user/${handle}`);
   return res.data;
 }
