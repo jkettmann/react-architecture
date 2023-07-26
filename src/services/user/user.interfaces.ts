@@ -1,17 +1,17 @@
-import { UserId } from "@/domain/user";
+import { UserHandle, UserId } from "@/domain/user";
 
 export interface UserDto {
   id: UserId;
   type: "user";
   attributes: {
-    handle: string;
+    handle: UserHandle;
     avatar: string;
     info?: string;
   };
 }
 
 export interface GetUserParams {
-  handle: string;
+  handle: UserHandle;
 }
 
 export interface GetUserDto {

@@ -1,6 +1,6 @@
 import { ImageId } from "@/domain/image";
 import { ShoutId } from "@/domain/shout";
-import { UserId } from "@/domain/user";
+import { UserHandle, UserId } from "@/domain/user";
 import { ImageDto } from "../image/image.interfaces";
 
 export interface ShoutDto {
@@ -41,7 +41,7 @@ export type CreateShoutApi = (
 ) => Promise<CreateShoutResponseDto>;
 
 export interface GetByUserParams {
-  handle: string;
+  handle: UserHandle;
 }
 
 export interface GetByUserResponseDto {

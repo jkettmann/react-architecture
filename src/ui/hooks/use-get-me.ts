@@ -1,13 +1,7 @@
+import { getMe } from "@/services/auth";
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/services/api-client";
-import { Me } from "@/ui/types";
 
 const ONE_HOUR = 1000 * 60 * 60;
-
-async function getMe() {
-  const res = await apiClient<{ data: Me }>(`/me`);
-  return res.data;
-}
 
 export function useGetMe() {
   const query = useQuery({

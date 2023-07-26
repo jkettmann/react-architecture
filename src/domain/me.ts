@@ -1,6 +1,5 @@
-import { User } from "./user";
+import { User, UserId } from "./user";
 
 export interface Me extends User {
-  followers: User[];
-  numFollowers: number;
+  followerIds: UserId[];
 }

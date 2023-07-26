@@ -14,7 +14,7 @@ import { Label } from "@/ui/components/ui/label";
 import { useLogin } from "@/ui/hooks/use-login";
 
 interface LoginFormElements extends HTMLFormControlsCollection {
-  username: HTMLInputElement;
+  handle: HTMLInputElement;
   password: HTMLInputElement;
 }
 
@@ -32,9 +32,9 @@ export function LoginDialog({ children }: LoginDialogProps) {
 
   async function handleSubmit(event: React.FormEvent<LoginForm>) {
     event.preventDefault();
-    const username = event.currentTarget.elements.username.value;
+    const handle = event.currentTarget.elements.handle.value;
     const password = event.currentTarget.elements.password.value;
-    await login.mutateAsync({ username, password });
+    await login.mutateAsync({ handle, password });
     setOpen(false);
   }
 
@@ -55,7 +55,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
               <span>Username</span>
               <Input
                 className="col-span-3"
-                name="username"
+                name="handle"
                 placeholder="Username"
                 defaultValue="prettypinkpony"
                 required

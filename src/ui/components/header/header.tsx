@@ -7,7 +7,7 @@ export function Header() {
   const me = useGetMe();
   const logout = useLogout();
 
-  if (me.isError || !me.data?.data) {
+  if (me.isError || !me.data) {
     return (
       <div className="w-full flex justify-end items-center p-2">
         <LoginDialog>
@@ -24,10 +24,10 @@ export function Header() {
       <div className="flex items-center gap-2">
         <img
           className="w-8 h-8 rounded-full"
-          src={me.data.data.attributes.avatar}
-          alt={me.data.data.attributes.handle}
+          src={me.data.avatar}
+          alt={me.data.handle}
         />
-        <span className="font-semibold">{`@${me.data.data.attributes.handle}`}</span>
+        <span className="font-semibold">{`@${me.data.handle}`}</span>
       </div>
       <Button
         size="sm"

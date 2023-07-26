@@ -39,7 +39,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const createShout = useCreateShout();
   const createShoutReply = useCreateShoutReply();
 
-  if (me.isError || !me.data?.data) {
+  if (me.isError || !me.data) {
     return <LoginDialog>{children}</LoginDialog>;
   }
 

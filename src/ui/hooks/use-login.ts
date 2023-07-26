@@ -1,19 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/services/api-client";
-
-interface Credentials {
-  username: string;
-  password: string;
-}
-
-async function login(credentials: Credentials) {
-  await apiClient.post(`/login`, credentials);
-}
+import { LoginParams, login } from "@/services/auth";
 
 export function useLogin() {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<void, unknown, Credentials>({
+  const mutation = useMutation<void, unknown, LoginParams>({
     mutationFn: (credentials) => login(credentials),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["me"] });
