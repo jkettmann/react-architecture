@@ -13,10 +13,10 @@ import { Label } from "@/ui/components/ui/label";
 import { Textarea } from "@/ui/components/ui/textarea";
 import { Input } from "@/ui/components/ui/input";
 import { LoginDialog } from "@/ui/components/login-dialog";
-import { useGetMe } from "@/ui/hooks/use-get-me";
-import { useUploadImage } from "@/ui/hooks/use-upload-image";
-import { useCreateShout } from "@/ui/hooks/use-create-shout";
-import { useCreateShoutReply } from "@/ui/hooks/use-create-shout-reply";
+import { useGetMe } from "@/application/auth/use-get-me";
+import { useUploadImage } from "@/application/image/use-upload-image";
+import { useCreateShout } from "@/application/shout/use-create-shout";
+import { useCreateShoutReply } from "@/application/shout/use-create-shout-reply";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;

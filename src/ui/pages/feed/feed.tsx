@@ -1,4 +1,4 @@
-import { useGetFeed } from "@/ui/hooks/use-get-feed";
+import { useGetFeed } from "@/application/feed/use-get-feed";
 import { ShoutList } from "@/ui/components/shout-list";
 import { LoadingSpinner } from "@/ui/components/loading-spinner";
 

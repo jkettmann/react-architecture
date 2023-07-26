@@ -11,7 +11,7 @@ import {
 } from "@/ui/components/ui/dialog";
 import { Input } from "@/ui/components/ui/input";
 import { Label } from "@/ui/components/ui/label";
-import { useLogin } from "@/ui/hooks/use-login";
+import { useLogin } from "@/application/auth/use-login";
 
 interface LoginFormElements extends HTMLFormControlsCollection {
   handle: HTMLInputElement;

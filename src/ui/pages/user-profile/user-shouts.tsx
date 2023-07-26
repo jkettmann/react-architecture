@@ -1,6 +1,6 @@
 import { LoadingSpinner } from "@/ui/components/loading-spinner";
 import { ShoutList } from "@/ui/components/shout-list";
-import { useGetShoutsByUser } from "@/ui/hooks/use-get-shouts-by-user";
+import { useGetShoutsByUser } from "@/application/shout/use-get-shouts-by-user";
 import { User } from "@/domain/user";
 
 type UserShoutsProps = {

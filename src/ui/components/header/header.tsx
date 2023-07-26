@@ -1,7 +1,7 @@
-import { useGetMe } from "@/ui/hooks/use-get-me";
+import { useGetMe } from "@/application/auth/use-get-me";
+import { useLogout } from "@/application/auth/use-logout";
 import { LoginDialog } from "@/ui/components/login-dialog";
 import { Button } from "@/ui/components/ui/button";
-import { useLogout } from "@/ui/hooks/use-logout";
 
 export function Header() {
   const me = useGetMe();
