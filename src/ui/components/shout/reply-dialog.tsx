@@ -14,8 +14,6 @@ import { Textarea } from "@/ui/components/ui/textarea";
 import { Input } from "@/ui/components/ui/input";
 import { LoginDialog } from "@/ui/components/login-dialog";
 import { useGetMe } from "@/application/auth/use-get-me";
-import { useUploadImage } from "@/application/image/use-upload-image";
-import { useCreateShout } from "@/application/shout/use-create-shout";
 import { useCreateShoutReply } from "@/application/shout/use-create-shout-reply";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
@@ -35,8 +33,6 @@ interface ReplyDialogProps {
 export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
   const me = useGetMe();
-  const uploadImage = useUploadImage();
-  const createShout = useCreateShout();
   const createShoutReply = useCreateShoutReply();
 
   if (me.isError || !me.data) {
@@ -46,19 +42,11 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
     const message = event.currentTarget.elements.message.value;
-    const files = event.currentTarget.elements.image.files;
-    const imageId = files?.length
-      ? await uploadImage.mutateAsync(files[0])
-      : undefined;
-    const replyId = await createShout.mutateAsync({ message, imageId });
-    await createShoutReply.mutateAsync({ shoutId, replyId });
+    const image =
+      event.currentTarget.elements.image.files?.item(0) || undefined;
+    await createShoutReply.mutateAsync({ message, image, shoutId });
     setOpen(false);
   }
-
-  const isLoading =
-    uploadImage.isLoading ||
-    createShout.isLoading ||
-    createShoutReply.isLoading;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -87,7 +75,11 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
             </Label>
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createShoutReply.isLoading}
+            >
               Shout out!
             </Button>
           </DialogFooter>
