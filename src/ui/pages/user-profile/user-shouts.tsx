@@ -17,11 +17,5 @@ export function UserShouts({ user }: UserShoutsProps) {
     return <LoadingSpinner />;
   }
 
-  return (
-    <ShoutList
-      shouts={shouts.data.data}
-      images={shouts.data.included}
-      users={[user]}
-    />
-  );
+  return <ShoutList shouts={shouts.data} author={user} />;
 }

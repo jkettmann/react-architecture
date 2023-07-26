@@ -1,13 +1,13 @@
 import { User } from "@/domain/user";
-import { GetUserApi, GetUserDto, GetUserParams } from "./user.interfaces";
+import { GetUserApi, GetUserParams, UserDto } from "./user.interfaces";
 
-export function dtoToEntity(dto: GetUserDto): User {
+export function dtoToEntity(dto: UserDto): User {
   return {
-    id: dto.data.id,
-    type: dto.data.type,
-    handle: dto.data.attributes.handle,
-    avatar: dto.data.attributes.avatar,
-    info: dto.data.attributes.info,
+    id: dto.id,
+    type: dto.type,
+    handle: dto.attributes.handle,
+    avatar: dto.attributes.avatar,
+    info: dto.attributes.info,
   };
 }
 
@@ -16,5 +16,5 @@ export async function getUser(
   params: GetUserParams
 ): Promise<User> {
   const dto = await api(params);
-  return dtoToEntity(dto);
+  return dtoToEntity(dto.data);
 }
