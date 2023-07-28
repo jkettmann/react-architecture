@@ -11,7 +11,7 @@ import {
 import { Button } from "@/ui/components/ui/button";
 import { Link } from "react-router-dom";
 import { User } from "@/domain/user";
-import { ShoutAggregate } from "@/domain/shout";
+import { ShoutAggregate, getStats } from "@/domain/shout";
 
 type ShoutProps = {
   shout: ShoutAggregate;
@@ -30,6 +30,7 @@ export function Shout(props: ShoutProps) {
   const { shout } = props;
   const { image } = shout;
   const author = shout.author || props.author || defaultAuthor;
+  const stats = getStats(shout);
   return (
     <Card key={shout.id} className="w-full">
       <Link to={`/user/${author.handle}`}>
@@ -63,16 +64,16 @@ export function Shout(props: ShoutProps) {
         <ReplyDialog shoutId={shout.id}>
           <Button variant="ghost" size="sm" className="gap-2">
             <MessageCircle className="h-4 w-4" />
-            {shout.replies.length}
+            {stats.replies}
           </Button>
         </ReplyDialog>
         <Button variant="ghost" size="sm" className="gap-2">
           <Heart className="h-4 w-4" />
-          {shout.likes}
+          {stats.likes}
         </Button>
         <Button variant="ghost" size="sm" className="gap-2">
           <Repeat2 className="h-4 w-4" />
-          {shout.reshouts}
+          {stats.reshouts}
         </Button>
       </CardFooter>
     </Card>

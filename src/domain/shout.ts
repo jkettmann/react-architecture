@@ -20,3 +20,11 @@ export interface ShoutAggregate extends Shout {
   author?: User;
   image?: Image;
 }
+
+export function getStats(shout: Shout) {
+  return {
+    likes: shout.likes,
+    reshouts: shout.reshouts,
+    replies: shout.replies.length,
+  };
+}
