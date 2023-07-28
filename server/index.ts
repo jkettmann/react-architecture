@@ -43,8 +43,9 @@ fastify.register(staticFiles, {
   prefix: "/cdn",
 });
 
-function waitRandomTime() {
-  const randomTime = Math.floor(Math.random() * 1000 + 500);
+function waitRandomTime({ min = 500, max = 1500 } = {}) {
+  const diff = Math.max(max - min, 1000);
+  const randomTime = Math.floor(Math.random() * diff + min);
   return setTimeout(randomTime);
 }
 
@@ -101,7 +102,7 @@ function prepareUsersForMe(users: DbUser[], me: DbUser | null) {
 
 // feed
 fastify.get("/api/feed", async function handler(req) {
-  await waitRandomTime();
+  await waitRandomTime({ min: 1500 });
   const me = getUserFromCookie(req.cookies);
   const feedResponse: DbFeedResponse = {
     data: shouts,

@@ -9,7 +9,15 @@ export function Feed() {
     return <div>An error occurred</div>;
   }
   if (!feed.data) {
-    return <LoadingSpinner />;
+    return (
+      <div className="flex flex-col justify-center items-center mt-24">
+        <div className="text-3xl font-bold">SHOUT!</div>
+        <div className="mt-1 text-md font-semibold">
+          The aggressive social network
+        </div>
+        <LoadingSpinner className="mt-4" />
+      </div>
+    );
   }
   const users = feed.data.included.filter((u): u is User => u.type === "user");
   const images = feed.data.included.filter(

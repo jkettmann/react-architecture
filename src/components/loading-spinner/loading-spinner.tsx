@@ -1,13 +1,11 @@
-import { BloodDrop } from "./blood-drop";
+import { AngryFace } from "./angry-face";
 
-type LoadingSpinnerProps = {};
-
-export function LoadingSpinner({}: LoadingSpinnerProps) {
+export function LoadingSpinner({
+  className = "",
+}: React.HtmlHTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex justify-center items-center gap-3">
-      <BloodDrop />
-      <BloodDrop style={{ animationDelay: "333ms" }} />
-      <BloodDrop style={{ animationDelay: "666ms" }} />
+    <div className={`flex justify-center items-center ${className}`}>
+      <AngryFace className="w-24 h-24" />
     </div>
   );
 }

@@ -9,10 +9,7 @@ export function Header() {
 
   if (me.isError || !me.data?.data) {
     return (
-      <div className="w-full flex justify-between items-center p-2">
-        <h1 className="font-semibold">
-          The world is a dark place! Let&apos;s make it darker
-        </h1>
+      <div className="w-full flex justify-end items-center p-2">
         <LoginDialog>
           <Button size="sm" disabled={logout.isLoading || me.isFetching}>
             Login

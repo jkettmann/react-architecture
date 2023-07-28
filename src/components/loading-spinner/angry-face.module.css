@@ -1,0 +1,37 @@
+@keyframes upperLip {
+  from {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(15px) scaleY(0.8);
+  }
+
+  to {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes lowerLip {
+  from {
+    transform: translateY(198px) scaleY(-1);
+  }
+
+  50% {
+    transform: translateY(173px) scaleY(-0.8);
+  }
+
+  to {
+    transform: translateY(198px) scaleY(-1);
+  }
+}
+
+.upperLip {
+  animation: upperLip 0.3s infinite;
+  transform-origin: center;
+}
+
+.lowerLip {
+  animation: lowerLip 0.3s infinite;
+  transform-origin: center;
+}
