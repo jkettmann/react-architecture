@@ -1,9 +1,5 @@
-type UserId = string;
-type ShoutId = string;
-type ImageId = string;
-
 export interface User {
-  id: UserId;
+  id: string;
   type: "user";
   attributes: {
     handle: string;
@@ -14,36 +10,31 @@ export interface User {
 
 export interface Me extends User {
   relationships: {
-    followerIds: UserId[];
+    followerIds: string[];
   };
 }
 
 export interface Shout {
-  id: ShoutId;
+  id: string;
   type: "shout";
   createdAt: number;
   attributes: {
-    authorId: UserId;
+    authorId: string;
     text: string;
     likes: number;
     reshouts: number;
-    imageId?: ImageId;
+    imageId?: string;
   };
   relationships: {
-    replies: ShoutId[];
-    replyTo?: ShoutId;
+    replies: string[];
+    replyTo?: string;
   };
 }
 
 export interface Image {
-  id: ImageId;
+  id: string;
   type: "image";
   attributes: {
     url: string;
   };
-}
-
-export interface ShoutsByUserResponse {
-  data: Shout[];
-  included: Image[];
 }

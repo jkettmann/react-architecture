@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,10 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { LoginDialog } from "@/components/login-dialog";
-import { useGetMe } from "@/hooks/use-get-me";
-import { useUploadImage } from "@/hooks/use-upload-image";
-import { useCreateShout } from "@/hooks/use-create-shout";
-import { useCreateShoutReply } from "@/hooks/use-create-shout-reply";
+import { Image, Me, Shout } from "@/types";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -34,35 +32,58 @@ interface ReplyDialogProps {
 
 export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
-  const me = useGetMe();
-  const uploadImage = useUploadImage();
-  const createShout = useCreateShout();
-  const createShoutReply = useCreateShoutReply();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  if (me.isError || !me.data?.data) {
+  useEffect(() => {
+    axios
+      .get<{ data: Me }>("/api/me")
+      .then((response) => {
+        setIsAuthenticated(Boolean(response.data.data));
+      })
+      .catch(() => {
+        setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (hasError || !isAuthenticated) {
     return <LoginDialog>{children}</LoginDialog>;
   }
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
-    const message = event.currentTarget.elements.message.value;
-    const files = event.currentTarget.elements.image.files;
-    let imageId = undefined;
-    if (files?.length) {
-      const formData = new FormData();
-      formData.append("image", files[0]);
-      const image = await uploadImage.mutateAsync(formData);
-      imageId = image.data.id;
+    setIsLoading(true);
+    try {
+      const message = event.currentTarget.elements.message.value;
+      const files = event.currentTarget.elements.image.files;
+      let imageId = undefined;
+      if (files?.length) {
+        const formData = new FormData();
+        formData.append("image", files[0]);
+        const imageResponse = await axios.post<{ data: Image }>(
+          "/api/image",
+          formData
+        );
+        imageId = imageResponse.data.data.id;
+      }
+      const newShoutResponse = await axios.post<{ data: Shout }>(`/api/shout`, {
+        message,
+        imageId,
+      });
+      await axios.post(`/api/shout/${shoutId}/reply`, {
+        replyId: newShoutResponse.data.data.id,
+      });
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    const newShout = await createShout.mutateAsync({ message, imageId });
-    await createShoutReply.mutateAsync({ shoutId, replyId: newShout.data.id });
-    setOpen(false);
   }
-
-  const isLoading =
-    uploadImage.isLoading ||
-    createShout.isLoading ||
-    createShoutReply.isLoading;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -87,7 +108,11 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
             </Label>
             <Label className="space-y-2">
               <span>Image (optional)</span>
-              <Input className="col-span-3" name="image" type="file" />
+              <Input
+                className="col-span-3 cursor-pointer"
+                name="image"
+                type="file"
+              />
             </Label>
           </div>
           <DialogFooter>

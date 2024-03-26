@@ -1,7 +1,5 @@
 import classes from "./angry-face.module.css";
 
-console.log({ classes });
-
 export function AngryFace({
   ...props
 }: React.HtmlHTMLAttributes<SVGSVGElement>) {
