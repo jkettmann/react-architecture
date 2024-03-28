@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { apiClient } from "@/api/client";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import { Me } from "@/types";
@@ -13,8 +13,8 @@ export function Header() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    axios
-      .get<{ data: Me }>("/api/me")
+    apiClient
+      .get<{ data: Me }>("/me")
       .then((response) => setMe(response.data.data))
       .catch(() => setHasError(true))
       .finally(() => setIsLoadingMe(false));
@@ -22,7 +22,7 @@ export function Header() {
 
   async function logout() {
     setIsLoadingLogout(true);
-    await axios.post(`/api/logout`);
+    await apiClient.post("/logout");
     setIsLoadingLogout(false);
     window.location.reload();
   }
