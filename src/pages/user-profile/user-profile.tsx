@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
-import { Image, Shout, User } from "@/types";
+
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { ShoutList } from "@/components/shout-list";
+import { Image, Shout, User } from "@/types";
+
 import { UserInfo } from "./user-info";
 
 type UserResponse = {

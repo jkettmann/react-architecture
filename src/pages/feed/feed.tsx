@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/types";
-import { LoadingSpinner } from "@/components/loading-spinner";
 
 type FeedResponse = {
   data: Shout[];

@@ -7,7 +7,6 @@ type UserInfoProps = {
 export function UserInfo({ user }: UserInfoProps) {
   return (
     <section className="flex gap-4">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="w-48 h-48 rounded-full"
         src={user.attributes.avatar}

@@ -1,13 +1,17 @@
-import { setTimeout } from "timers/promises";
 import fs from "fs";
-import util from "util";
-import { pipeline } from "stream";
 import path from "path";
-import Fastify, { FastifyRequest } from "fastify";
-import cookie, { FastifyCookieOptions } from "@fastify/cookie";
-import staticFiles from "@fastify/static";
-import multipart from "@fastify/multipart";
+import { pipeline } from "stream";
+import { setTimeout } from "timers/promises";
 import { fileURLToPath } from "url";
+import util from "util";
+
+import cookie, { FastifyCookieOptions } from "@fastify/cookie";
+import multipart from "@fastify/multipart";
+import staticFiles from "@fastify/static";
+// eslint-disable-next-line import/named
+import Fastify, { FastifyRequest } from "fastify";
+
+import { shouts, users, images } from "./data";
 import {
   DbFeedResponse,
   DbImage,
@@ -16,7 +20,6 @@ import {
   MeDto,
   UserDto,
 } from "./types";
-import { shouts, users, images } from "./data";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,7 +81,7 @@ function getUserFromCookie(cookies: Record<string, string | undefined>) {
 }
 
 function prepareUserForMe(user: DbUser, me: DbUser | null) {
-  let userDto: UserDto = {
+  const userDto: UserDto = {
     ...user,
     relationships: {} as UserDto["relationships"],
   };

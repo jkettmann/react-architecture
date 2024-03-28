@@ -1,5 +1,5 @@
-import { User, Shout as TShout, Image } from "@/types";
 import { Shout } from "@/components/shout";
+import { User, Shout as TShout, Image } from "@/types";
 
 type ShoutListProps = {
   shouts: TShout[];

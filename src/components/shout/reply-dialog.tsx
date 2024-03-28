@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,10 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { LoginDialog } from "@/components/login-dialog";
 import { Image, Me, Shout } from "@/types";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {

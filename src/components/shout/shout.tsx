@@ -1,6 +1,8 @@
-import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { ReplyDialog } from "./reply-dialog";
+import { Heart, Repeat2, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,9 +10,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Image as IImage, Shout as IShout, User } from "@/types";
-import { Link } from "react-router-dom";
+
+import { ReplyDialog } from "./reply-dialog";
 
 type ShoutProps = {
   shout: IShout;

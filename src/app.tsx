@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import { Layout } from "@/components/layout";
 import { Feed } from "@/pages/feed";
 import { UserProfile } from "@/pages/user-profile";
