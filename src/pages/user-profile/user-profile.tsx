@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
+import { apiClient } from "@/api/client";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { UserResponse, UserShoutsResponse } from "@/types";
@@ -16,13 +16,13 @@ export function UserProfile() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    axios
-      .get<UserResponse>(`/api/user/${handle}`)
+    apiClient
+      .get<UserResponse>(`/user/${handle}`)
       .then((response) => setUser(response.data))
       .catch(() => setHasError(true));
 
-    axios
-      .get<UserShoutsResponse>(`/api/user/${handle}/shouts`)
+    apiClient
+      .get<UserShoutsResponse>(`/user/${handle}/shouts`)
       .then((response) => setUserShouts(response.data))
       .catch(() => setHasError(true));
   }, [handle]);
