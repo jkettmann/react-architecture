@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
+import { apiClient } from "@/api/client";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,8 +38,8 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    axios
-      .get<{ data: Me }>("/api/me")
+    apiClient
+      .get<{ data: Me }>("/me")
       .then((response) => setIsAuthenticated(Boolean(response.data.data)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
@@ -59,17 +59,17 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
       if (files?.length) {
         const formData = new FormData();
         formData.append("image", files[0]);
-        const imageResponse = await axios.post<{ data: Image }>(
-          "/api/image",
+        const imageResponse = await apiClient.post<{ data: Image }>(
+          "/image",
           formData
         );
         imageId = imageResponse.data.data.id;
       }
-      const newShoutResponse = await axios.post<{ data: Shout }>(`/api/shout`, {
+      const newShoutResponse = await apiClient.post<{ data: Shout }>(`/shout`, {
         message,
         imageId,
       });
-      await axios.post(`/api/shout/${shoutId}/reply`, {
+      await apiClient.post(`/shout/${shoutId}/reply`, {
         replyId: newShoutResponse.data.data.id,
       });
       setOpen(false);
