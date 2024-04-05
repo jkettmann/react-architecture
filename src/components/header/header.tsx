@@ -15,15 +15,9 @@ export function Header() {
   useEffect(() => {
     axios
       .get<{ data: Me }>("/api/me")
-      .then((response) => {
-        setMe(response.data.data);
-      })
-      .catch(() => {
-        setHasError(true);
-      })
-      .finally(() => {
-        setIsLoadingMe(false);
-      });
+      .then((response) => setMe(response.data.data))
+      .catch(() => setHasError(true))
+      .finally(() => setIsLoadingMe(false));
   }, []);
 
   async function logout() {

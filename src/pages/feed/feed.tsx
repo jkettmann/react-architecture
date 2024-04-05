@@ -17,12 +17,8 @@ export function Feed() {
   useEffect(() => {
     axios
       .get<FeedResponse>("/api/feed")
-      .then((response) => {
-        setFeed(response.data);
-      })
-      .catch(() => {
-        setHasError(true);
-      });
+      .then((response) => setFeed(response.data))
+      .catch(() => setHasError(true));
   }, []);
 
   if (hasError) {

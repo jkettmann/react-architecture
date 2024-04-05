@@ -27,21 +27,13 @@ export function UserProfile() {
   useEffect(() => {
     axios
       .get<UserResponse>(`/api/user/${handle}`)
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch(() => {
-        setHasError(true);
-      });
+      .then((response) => setUser(response.data))
+      .catch(() => setHasError(true));
 
     axios
       .get<UserShoutsResponse>(`/api/user/${handle}/shouts`)
-      .then((response) => {
-        setUserShouts(response.data);
-      })
-      .catch(() => {
-        setHasError(true);
-      });
+      .then((response) => setUserShouts(response.data))
+      .catch(() => setHasError(true));
   }, [handle]);
 
   if (!handle) {

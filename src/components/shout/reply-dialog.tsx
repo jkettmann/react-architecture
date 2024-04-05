@@ -40,15 +40,9 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   useEffect(() => {
     axios
       .get<{ data: Me }>("/api/me")
-      .then((response) => {
-        setIsAuthenticated(Boolean(response.data.data));
-      })
-      .catch(() => {
-        setHasError(true);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .then((response) => setIsAuthenticated(Boolean(response.data.data)))
+      .catch(() => setHasError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (hasError || !isAuthenticated) {
