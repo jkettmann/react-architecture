@@ -2,6 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,17 +11,16 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Image as IImage, Shout as IShout, User } from "@/types";
 
 import { ReplyDialog } from "./reply-dialog";
 
 interface ShoutProps {
-  shout: IShout;
-  author?: User;
-  image?: IImage;
+  shout: ShoutDto;
+  author?: UserDto;
+  image?: ImageDto;
 }
 
-const defaultAuthor: User = {
+const defaultAuthor: UserDto = {
   id: "invalid",
   type: "user",
   attributes: {

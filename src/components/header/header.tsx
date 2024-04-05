@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AuthApi from "@/api/auth";
+import { MeDto } from "@/api/dtos";
 import UserApi from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
-import { Me } from "@/types";
 
 export function Header() {
   const [isLoadingMe, setIsLoadingMe] = useState(true);
   const [isLoadingLogout, setIsLoadingLogout] = useState(false);
-  const [me, setMe] = useState<Me>();
+  const [me, setMe] = useState<MeDto>();
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {

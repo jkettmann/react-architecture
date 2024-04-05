@@ -1,5 +1,5 @@
 /* DATA TYPES */
-export interface User {
+export interface UserDto {
   id: string;
   type: "user";
   attributes: {
@@ -9,13 +9,13 @@ export interface User {
   };
 }
 
-export interface Me extends User {
+export interface MeDto extends UserDto {
   relationships: {
     followerIds: string[];
   };
 }
 
-export interface Shout {
+export interface ShoutDto {
   id: string;
   type: "shout";
   createdAt: number;
@@ -32,7 +32,7 @@ export interface Shout {
   };
 }
 
-export interface Image {
+export interface ImageDto {
   id: string;
   type: "image";
   attributes: {
@@ -42,17 +42,17 @@ export interface Image {
 
 /* RESPONSE TYPES */
 export interface FeedResponse {
-  data: Shout[];
-  included: (User | Image)[];
+  data: ShoutDto[];
+  included: (UserDto | ImageDto)[];
 }
 
 export interface UserResponse {
-  data: User;
+  data: UserDto;
 }
 
 export interface UserShoutsResponse {
-  data: Shout[];
-  included: Image[];
+  data: ShoutDto[];
+  included: ImageDto[];
 }
 
 /* INPUT TYPES */
