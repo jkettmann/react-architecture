@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AuthApi from "@/api/auth";
-import { MeDto } from "@/api/dtos";
 import UserApi from "@/api/user";
+import { MeDto } from "@/api/user/dto";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 
