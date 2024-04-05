@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router";
 import UserApi from "@/api/user";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { User, UserShoutsResponse } from "@/types";
+import { Image, Shout, User } from "@/types";
 
 import { UserInfo } from "./user-info";
 
@@ -12,7 +12,8 @@ export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
 
   const [user, setUser] = useState<User>();
-  const [userShouts, setUserShouts] = useState<UserShoutsResponse>();
+  const [shouts, setShouts] = useState<Shout[]>();
+  const [images, setImages] = useState<Image[]>([]);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -21,11 +22,14 @@ export function UserProfile() {
     }
 
     UserApi.getUser(handle)
-      .then((response) => setUser(response.data))
+      .then((user) => setUser(user))
       .catch(() => setHasError(true));
 
     UserApi.getUserShouts(handle)
-      .then((response) => setUserShouts(response))
+      .then(({ shouts, images }) => {
+        setShouts(shouts);
+        setImages(images);
+      })
       .catch(() => setHasError(true));
   }, [handle]);
 
@@ -36,18 +40,14 @@ export function UserProfile() {
   if (hasError) {
     return <div>An error occurred</div>;
   }
-  if (!user || !userShouts) {
+  if (!user || !shouts) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="max-w-2xl w-full mx-auto flex flex-col p-6 gap-6">
       <UserInfo user={user} />
-      <ShoutList
-        users={[user]}
-        shouts={userShouts.data}
-        images={userShouts.included}
-      />
+      <ShoutList users={[user]} shouts={shouts} images={images} />
     </div>
   );
 }

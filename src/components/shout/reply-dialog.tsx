@@ -40,7 +40,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
   useEffect(() => {
     UserApi.getMe()
-      .then((response) => setIsAuthenticated(Boolean(response.data)))
+      .then((me) => setIsAuthenticated(Boolean(me)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
   }, []);
@@ -60,7 +60,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
         const formData = new FormData();
         formData.append("image", files[0]);
         const image = await MediaApi.uploadImage(formData);
-        imageId = image.data.id;
+        imageId = image.id;
       }
       const newShout = await ShoutApi.createShout({
         message,
@@ -68,7 +68,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
       });
       await ShoutApi.createReply({
         shoutId,
-        replyId: newShout.data.id,
+        replyId: newShout.id,
       });
       setOpen(false);
     } catch (error) {
