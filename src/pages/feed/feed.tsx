@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import { LoadingSpinner } from "@/components/loading-spinner";
+import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/types";
 
@@ -24,17 +24,11 @@ export function Feed() {
   if (hasError) {
     return <div>An error occurred</div>;
   }
+
   if (!feed) {
-    return (
-      <div className="flex flex-col justify-center items-center mt-24">
-        <div className="text-3xl font-bold">SHOUT!</div>
-        <div className="mt-1 text-md font-semibold">
-          The aggressive social network
-        </div>
-        <LoadingSpinner className="mt-4" />
-      </div>
-    );
+    return <LoadingView />;
   }
+
   const users = feed.included.filter((u): u is User => u.type === "user");
   const images = feed.included.filter((i): i is Image => i.type === "image");
   return (
