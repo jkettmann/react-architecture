@@ -4,7 +4,8 @@ import { apiClient } from "./client";
 
 async function uploadImage(formData: FormData) {
   const response = await apiClient.post<{ data: Image }>("/image", formData);
-  return response.data;
+  const image = response.data.data;
+  return image;
 }
 
 export default { uploadImage };

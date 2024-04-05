@@ -4,7 +4,8 @@ import { apiClient } from "./client";
 
 async function createShout(input: CreateShoutInput) {
   const response = await apiClient.post<{ data: Shout }>(`/shout`, input);
-  return response.data;
+  const shout = response.data.data;
+  return shout;
 }
 
 async function createReply({ shoutId, replyId }: CreateShoutReplyInput) {
@@ -12,7 +13,8 @@ async function createReply({ shoutId, replyId }: CreateShoutReplyInput) {
     `/shout/${shoutId}/reply`,
     { replyId }
   );
-  return response.data;
+  const reply = response.data.data;
+  return reply;
 }
 
 export default { createShout, createReply };
