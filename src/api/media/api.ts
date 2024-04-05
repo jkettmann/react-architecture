@@ -1,5 +1,6 @@
-import { apiClient } from "./client";
-import { ImageDto } from "./dtos";
+import { apiClient } from "../client";
+
+import { ImageDto } from "./dto";
 
 async function uploadImage(file: File) {
   const formData = new FormData();

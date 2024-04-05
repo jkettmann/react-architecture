@@ -2,7 +2,9 @@ import { formatDistanceToNow } from "date-fns";
 import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
+import { ImageDto } from "@/api/media/dto";
+import { ShoutDto } from "@/api/shout/dto";
+import { UserDto } from "@/api/user/dto";
 import { Button } from "@/components/ui/button";
 import {
   Card,

@@ -1,5 +1,6 @@
-import { apiClient } from "./client";
-import { MeDto, UserDto, UserShoutsResponse } from "./dtos";
+import { apiClient } from "../client";
+
+import { MeDto, UserDto, UserShoutsResponse } from "./dto";
 
 async function getMe() {
   const response = await apiClient.get<{ data: MeDto }>("/me");

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
 import FeedApi from "@/api/feed";
+import { ImageDto } from "@/api/media/dto";
+import { ShoutDto } from "@/api/shout/dto";
+import { UserDto } from "@/api/user/dto";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 
