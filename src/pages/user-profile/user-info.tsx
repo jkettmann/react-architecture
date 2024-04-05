@@ -1,7 +1,7 @@
-import { User } from "@/types";
+import { UserDto } from "@/api/dtos";
 
 interface UserInfoProps {
-  user: User;
+  user: UserDto;
 }
 
 export function UserInfo({ user }: UserInfoProps) {

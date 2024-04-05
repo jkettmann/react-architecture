@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
+import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
 import FeedApi from "@/api/feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image, Shout, User } from "@/types";
 
 export function Feed() {
   const [feed, setFeed] = useState<{
-    shouts: Shout[];
-    images: Image[];
-    users: User[];
+    shouts: ShoutDto[];
+    images: ImageDto[];
+    users: UserDto[];
   }>();
   const [hasError, setHasError] = useState(false);
 
