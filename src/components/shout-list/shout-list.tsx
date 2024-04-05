@@ -1,4 +1,6 @@
-import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
+import { ImageDto } from "@/api/media/dto";
+import { ShoutDto } from "@/api/shout/dto";
+import { UserDto } from "@/api/user/dto";
 import { Shout } from "@/components/shout";
 
 interface ShoutListProps {

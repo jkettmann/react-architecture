@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
+import { ImageDto } from "@/api/media/dto";
+import { ShoutDto } from "@/api/shout/dto";
 import UserApi from "@/api/user";
+import { UserDto } from "@/api/user/dto";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 

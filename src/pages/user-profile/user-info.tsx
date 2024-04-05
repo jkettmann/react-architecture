@@ -1,4 +1,4 @@
-import { UserDto } from "@/api/dtos";
+import { UserDto } from "@/api/user/dto";
 
 interface UserInfoProps {
   user: UserDto;

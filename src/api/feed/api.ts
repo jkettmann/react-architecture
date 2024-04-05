@@ -1,5 +1,8 @@
-import { apiClient } from "./client";
-import { FeedResponse, ImageDto, UserDto } from "./dtos";
+import { apiClient } from "../client";
+import { ImageDto } from "../media/dto";
+import { UserDto } from "../user/dto";
+
+import { FeedResponse } from "./dto";
 
 async function getFeed() {
   const response = await apiClient.get<FeedResponse>("/feed");

@@ -1,5 +1,6 @@
-import { apiClient } from "./client";
-import { ShoutDto, CreateShoutInput, CreateShoutReplyInput } from "./dtos";
+import { apiClient } from "../client";
+
+import { CreateShoutInput, CreateShoutReplyInput, ShoutDto } from "./dto";
 
 async function createShout(input: CreateShoutInput) {
   const response = await apiClient.post<{ data: ShoutDto }>(`/shout`, input);
