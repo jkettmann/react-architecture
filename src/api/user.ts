@@ -1,15 +1,14 @@
-import { Me, User, UserShoutsResponse } from "@/types";
-
 import { apiClient } from "./client";
+import { MeDto, UserDto, UserShoutsResponse } from "./dtos";
 
 async function getMe() {
-  const response = await apiClient.get<{ data: Me }>("/me");
+  const response = await apiClient.get<{ data: MeDto }>("/me");
   const me = response.data.data;
   return me;
 }
 
 async function getUser(handle: string) {
-  const response = await apiClient.get<{ data: User }>(`/user/${handle}`);
+  const response = await apiClient.get<{ data: UserDto }>(`/user/${handle}`);
   const user = response.data.data;
   return user;
 }

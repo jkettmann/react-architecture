@@ -1,10 +1,10 @@
+import { ImageDto, ShoutDto, UserDto } from "@/api/dtos";
 import { Shout } from "@/components/shout";
-import { User, Shout as TShout, Image } from "@/types";
 
 interface ShoutListProps {
-  shouts: TShout[];
-  images: Image[];
-  users: User[];
+  shouts: ShoutDto[];
+  images: ImageDto[];
+  users: UserDto[];
 }
 
 export function ShoutList({ shouts, users, images }: ShoutListProps) {
