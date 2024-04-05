@@ -1,21 +1,19 @@
-import { ImageDto } from "@/api/media/dto";
-import { ShoutDto } from "@/api/shout/dto";
-import { UserDto } from "@/api/user/dto";
 import { Shout } from "@/components/shout";
+import { Image, Shout as IShout, User } from "@/domain";
 
 interface ShoutListProps {
-  shouts: ShoutDto[];
-  images: ImageDto[];
-  users: UserDto[];
+  shouts: IShout[];
+  images: Image[];
+  users: User[];
 }
 
 export function ShoutList({ shouts, users, images }: ShoutListProps) {
   return (
     <ul className="flex flex-col gap-4 items-center">
       {shouts.map((shout) => {
-        const author = users.find((u) => u.id === shout.attributes.authorId);
-        const image = shout.attributes.imageId
-          ? images.find((i) => i.id === shout.attributes.imageId)
+        const author = users.find((u) => u.id === shout.authorId);
+        const image = shout.imageId
+          ? images.find((i) => i.id === shout.imageId)
           : undefined;
         return (
           <li key={shout.id} className="max-w-sm w-full">

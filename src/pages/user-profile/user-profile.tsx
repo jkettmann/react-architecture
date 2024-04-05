@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import { ImageDto } from "@/api/media/dto";
-import { ShoutDto } from "@/api/shout/dto";
 import UserApi from "@/api/user";
-import { UserDto } from "@/api/user/dto";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
+import { Image, Shout, User } from "@/domain";
 
 import { UserInfo } from "./user-info";
 
 export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
 
-  const [user, setUser] = useState<UserDto>();
-  const [shouts, setShouts] = useState<ShoutDto[]>();
-  const [images, setImages] = useState<ImageDto[]>([]);
+  const [user, setUser] = useState<User>();
+  const [shouts, setShouts] = useState<Shout[]>();
+  const [images, setImages] = useState<Image[]>([]);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {

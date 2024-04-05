@@ -1,6 +1,7 @@
 import { apiClient } from "../client";
 
 import { ImageDto } from "./dto";
+import { dtoToImage } from "./transform";
 
 async function uploadImage(file: File) {
   const formData = new FormData();
@@ -8,7 +9,7 @@ async function uploadImage(file: File) {
 
   const response = await apiClient.post<{ data: ImageDto }>("/image", formData);
   const image = response.data.data;
-  return image;
+  return dtoToImage(image);
 }
 
 export default { uploadImage };
