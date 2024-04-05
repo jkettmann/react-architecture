@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { apiClient } from "@/api/client";
+import AuthApi from "@/api/auth";
+import UserApi from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import { Me } from "@/types";
@@ -13,16 +14,15 @@ export function Header() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    apiClient
-      .get<{ data: Me }>("/me")
-      .then((response) => setMe(response.data.data))
+    UserApi.getMe()
+      .then((response) => setMe(response.data))
       .catch(() => setHasError(true))
       .finally(() => setIsLoadingMe(false));
   }, []);
 
   async function logout() {
     setIsLoadingLogout(true);
-    await apiClient.post("/logout");
+    await AuthApi.logout();
     setIsLoadingLogout(false);
     window.location.reload();
   }

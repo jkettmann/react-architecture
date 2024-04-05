@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { apiClient } from "@/api/client";
+import FeedApi from "@/api/feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { FeedResponse, Image, User } from "@/types";
@@ -10,9 +10,8 @@ export function Feed() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    apiClient
-      .get<FeedResponse>("/feed")
-      .then((response) => setFeed(response.data))
+    FeedApi.getFeed()
+      .then((feed) => setFeed(feed))
       .catch(() => setHasError(true));
   }, []);
 

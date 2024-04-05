@@ -1,29 +1,31 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import { apiClient } from "@/api/client";
+import UserApi from "@/api/user";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { UserResponse, UserShoutsResponse } from "@/types";
+import { User, UserShoutsResponse } from "@/types";
 
 import { UserInfo } from "./user-info";
 
 export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
 
-  const [user, setUser] = useState<UserResponse>();
+  const [user, setUser] = useState<User>();
   const [userShouts, setUserShouts] = useState<UserShoutsResponse>();
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    apiClient
-      .get<UserResponse>(`/user/${handle}`)
+    if (!handle) {
+      return;
+    }
+
+    UserApi.getUser(handle)
       .then((response) => setUser(response.data))
       .catch(() => setHasError(true));
 
-    apiClient
-      .get<UserShoutsResponse>(`/user/${handle}/shouts`)
-      .then((response) => setUserShouts(response.data))
+    UserApi.getUserShouts(handle)
+      .then((response) => setUserShouts(response))
       .catch(() => setHasError(true));
   }, [handle]);
 
@@ -40,9 +42,9 @@ export function UserProfile() {
 
   return (
     <div className="max-w-2xl w-full mx-auto flex flex-col p-6 gap-6">
-      <UserInfo user={user.data} />
+      <UserInfo user={user} />
       <ShoutList
-        users={[user.data]}
+        users={[user]}
         shouts={userShouts.data}
         images={userShouts.included}
       />
