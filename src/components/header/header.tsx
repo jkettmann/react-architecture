@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 import AuthApi from "@/api/auth";
 import UserApi from "@/api/user";
-import { MeDto } from "@/api/user/dto";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
+import { Me } from "@/domain";
 
 export function Header() {
   const [isLoadingMe, setIsLoadingMe] = useState(true);
   const [isLoadingLogout, setIsLoadingLogout] = useState(false);
-  const [me, setMe] = useState<MeDto>();
+  const [me, setMe] = useState<Me>();
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -41,16 +41,9 @@ export function Header() {
 
   return (
     <div className="w-full flex justify-between p-2">
-      <Link
-        className="flex items-center gap-2"
-        to={`/user/${me.attributes.handle}`}
-      >
-        <img
-          className="w-8 h-8 rounded-full"
-          src={me.attributes.avatar}
-          alt={me.attributes.handle}
-        />
-        <span className="font-semibold">{`@${me.attributes.handle}`}</span>
+      <Link className="flex items-center gap-2" to={`/user/${me.handle}`}>
+        <img className="w-8 h-8 rounded-full" src={me.avatar} alt={me.handle} />
+        <span className="font-semibold">{`@${me.handle}`}</span>
       </Link>
       <Button size="sm" onClick={logout} disabled={isLoadingLogout}>
         Logout

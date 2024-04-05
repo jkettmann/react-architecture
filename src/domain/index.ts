@@ -15,7 +15,7 @@ export interface Shout {
   text: string;
   likes: number;
   reshouts: number;
-  image?: Image;
+  imageId?: string;
   replies: string[];
   replyTo?: string;
 }
