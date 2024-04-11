@@ -9,6 +9,7 @@
     "dev:server": "tsx watch --ignore server/public server",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prettier": "prettier ./src --check",
     "types": "tsc --noEmit",
     "preview": "vite preview",
     "prepare": "husky"
