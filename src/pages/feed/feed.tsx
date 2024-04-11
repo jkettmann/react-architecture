@@ -3,12 +3,7 @@ import { useEffect, useState } from "react";
 
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image, Shout, User } from "@/types";
-
-type FeedResponse = {
-  data: Shout[];
-  included: (User | Image)[];
-};
+import { FeedResponse, Image, User } from "@/types";
 
 export function Feed() {
   const [feed, setFeed] = useState<FeedResponse>();

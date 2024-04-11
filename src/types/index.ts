@@ -1,3 +1,4 @@
+/* DATA TYPES */
 export interface User {
   id: string;
   type: "user";
@@ -37,4 +38,35 @@ export interface Image {
   attributes: {
     url: string;
   };
+}
+
+/* RESPONSE TYPES */
+export interface FeedResponse {
+  data: Shout[];
+  included: (User | Image)[];
+}
+
+export interface UserResponse {
+  data: User;
+}
+
+export interface UserShoutsResponse {
+  data: Shout[];
+  included: Image[];
+}
+
+/* INPUT TYPES */
+export interface Credentials {
+  username: string;
+  password: string;
+}
+
+export interface CreateShoutInput {
+  message: string;
+  imageId?: string;
+}
+
+export interface CreateShoutReplyInput {
+  shoutId: string;
+  replyId: string;
 }

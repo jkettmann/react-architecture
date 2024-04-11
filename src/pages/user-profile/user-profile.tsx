@@ -4,18 +4,9 @@ import { Navigate, useParams } from "react-router";
 
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image, Shout, User } from "@/types";
+import { UserResponse, UserShoutsResponse } from "@/types";
 
 import { UserInfo } from "./user-info";
-
-type UserResponse = {
-  data: User;
-};
-
-type UserShoutsResponse = {
-  data: Shout[];
-  included: Image[];
-};
 
 export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
