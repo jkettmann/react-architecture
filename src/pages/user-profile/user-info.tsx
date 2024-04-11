@@ -1,8 +1,8 @@
 import { User } from "@/types";
 
-type UserInfoProps = {
+interface UserInfoProps {
   user: User;
-};
+}
 
 export function UserInfo({ user }: UserInfoProps) {
   return (

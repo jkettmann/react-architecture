@@ -14,11 +14,11 @@ import { Image as IImage, Shout as IShout, User } from "@/types";
 
 import { ReplyDialog } from "./reply-dialog";
 
-type ShoutProps = {
+interface ShoutProps {
   shout: IShout;
   author?: User;
   image?: IImage;
-};
+}
 
 const defaultAuthor: User = {
   id: "invalid",
