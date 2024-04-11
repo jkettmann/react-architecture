@@ -1,4 +1,4 @@
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { formatDistanceToNow } from "date-fns";
 import { Heart, Repeat2, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 

@@ -209,9 +209,11 @@ fastify.post("/api/image", async function handler(req, reply) {
   }
 
   const filename = `${images.length + 1}-${data.filename}`;
-  const storedFile = fs.createWriteStream(
-    path.join(__dirname, "public/shouts", filename)
-  );
+  const shoutDir = path.join(__dirname, "public", "shouts");
+  if (!fs.existsSync(shoutDir)) {
+    fs.mkdirSync(shoutDir);
+  }
+  const storedFile = fs.createWriteStream(path.join(shoutDir, filename));
   await pump(data.file, storedFile);
 
   const image: DbImage = {
