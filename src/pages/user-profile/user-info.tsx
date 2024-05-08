@@ -13,8 +13,13 @@ export function UserInfo({ user }: UserInfoProps) {
         alt={`${user.attributes.handle}'s avatar`}
       />
       <div>
-        <h1 className="text-xl font-bold">@{user.attributes.handle}</h1>
-        <p className="">{user.attributes.info || "Shush! I'm a ghost."}</p>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl font-bold">@{user.attributes.handle}</h1>
+          <span className="text-sm text-gray-600">
+            ({user.relationships.followerIds.length} follower)
+          </span>
+        </div>
+        <p>{user.attributes.info || "Shush! I'm a ghost."}</p>
       </div>
     </section>
   );

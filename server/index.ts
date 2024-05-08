@@ -83,17 +83,19 @@ function getUserFromCookie(cookies: Record<string, string | undefined>) {
 function prepareUserForMe(user: DbUser, me: DbUser | null) {
   const userDto: UserDto = {
     ...user,
-    relationships: {} as UserDto["relationships"],
+    relationships: {
+      followerIds: users
+        .filter((u) => u.attributes.followsUserIds.includes(user.id))
+        .map((u) => u.id),
+    } as UserDto["relationships"],
   };
   if (!me) {
     return userDto;
   }
-  userDto.relationships = {
-    me: {
-      attributes: {
-        isBlocked: user.attributes.blockedUserIds.includes(me.id),
-        isFollowing: user.attributes.followsUserIds.includes(me.id),
-      },
+  userDto.relationships.me = {
+    attributes: {
+      isBlocked: user.attributes.blockedUserIds.includes(me.id),
+      isFollowing: user.attributes.followsUserIds.includes(me.id),
     },
   };
   return userDto;

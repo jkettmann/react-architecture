@@ -7,13 +7,12 @@ export interface User {
     avatar: string;
     info?: string;
   };
-}
-
-export interface Me extends User {
   relationships: {
     followerIds: string[];
   };
 }
+
+export interface Me extends User {}
 
 export interface Shout {
   id: string;
