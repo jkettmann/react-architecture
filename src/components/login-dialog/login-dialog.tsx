@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import AuthRepository from "@/api/auth";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import AuthRepository from "@/infrastructure/auth";
 
 interface LoginFormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;

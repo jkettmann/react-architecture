@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-import MediaRepository from "@/api/media";
-import ShoutRepository from "@/api/shout";
-import UserRepository from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import MediaRepository from "@/infrastructure/media";
+import ShoutRepository from "@/infrastructure/shout";
+import UserRepository from "@/infrastructure/user";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;

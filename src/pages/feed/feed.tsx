@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import FeedRepository from "@/api/feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
+import FeedRepository from "@/infrastructure/feed";
 
 export function Feed() {
   const [feed, setFeed] = useState<{
