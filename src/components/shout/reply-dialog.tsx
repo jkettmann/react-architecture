@@ -58,7 +58,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
       let image;
       if (files?.length) {
-        image = await MediaApi.uploadImage(files[0]);
+        image = await MediaApi.saveImage(files[0]);
       }
 
       const newShout = await ShoutApi.createShout({
