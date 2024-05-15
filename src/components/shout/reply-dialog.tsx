@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import MediaApi from "@/api/media";
-import ShoutApi from "@/api/shout";
-import UserApi from "@/api/user";
+import MediaRepository from "@/api/media";
+import ShoutRepository from "@/api/shout";
+import UserRepository from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +39,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    UserApi.getMe()
+    UserRepository.getMe()
       .then((me) => setIsAuthenticated(Boolean(me)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
@@ -58,15 +58,15 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
       let image;
       if (files?.length) {
-        image = await MediaApi.uploadImage(files[0]);
+        image = await MediaRepository.saveImage(files[0]);
       }
 
-      const newShout = await ShoutApi.createShout({
+      const newShout = await ShoutRepository.createShout({
         message,
         imageId: image?.id,
       });
 
-      await ShoutApi.createReply({
+      await ShoutRepository.createReply({
         shoutId,
         replyId: newShout.id,
       });

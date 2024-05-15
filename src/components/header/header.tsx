@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import AuthApi from "@/api/auth";
-import UserApi from "@/api/user";
+import AuthRepository from "@/api/auth";
+import UserRepository from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import { Me } from "@/domain";
@@ -14,7 +14,7 @@ export function Header() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    UserApi.getMe()
+    UserRepository.getMe()
       .then((me) => setMe(me))
       .catch(() => setHasError(true))
       .finally(() => setIsLoadingMe(false));
@@ -22,7 +22,7 @@ export function Header() {
 
   async function logout() {
     setIsLoadingLogout(true);
-    await AuthApi.logout();
+    await AuthRepository.logout();
     setIsLoadingLogout(false);
     window.location.reload();
   }

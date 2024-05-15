@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import UserApi from "@/api/user";
+import UserRepository from "@/api/user";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
@@ -21,11 +21,11 @@ export function UserProfile() {
       return;
     }
 
-    UserApi.getUser(handle)
+    UserRepository.getUser(handle)
       .then((user) => setUser(user))
       .catch(() => setHasError(true));
 
-    UserApi.getUserShouts(handle)
+    UserRepository.getUserShouts(handle)
       .then(({ shouts, images }) => {
         setShouts(shouts);
         setImages(images);
