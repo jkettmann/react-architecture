@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import AuthService from "@/api/auth";
-import UserService from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import { Me } from "@/domain";
+import AuthService from "@/infrastructure/auth";
+import UserService from "@/infrastructure/user";
 
 export function Header() {
   const [isLoadingMe, setIsLoadingMe] = useState(true);
