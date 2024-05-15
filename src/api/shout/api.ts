@@ -1,12 +1,10 @@
 import { apiClient } from "../client";
 
 import { CreateShoutInput, CreateShoutReplyInput, ShoutDto } from "./dto";
-import { dtoToShout } from "./transform";
 
 async function createShout(input: CreateShoutInput) {
   const response = await apiClient.post<{ data: ShoutDto }>(`/shout`, input);
-  const shoutDto = response.data.data;
-  return dtoToShout(shoutDto);
+  return response.data;
 }
 
 async function createReply({ shoutId, replyId }: CreateShoutReplyInput) {
@@ -14,8 +12,7 @@ async function createReply({ shoutId, replyId }: CreateShoutReplyInput) {
     `/shout/${shoutId}/reply`,
     { replyId }
   );
-  const replyDto = response.data.data;
-  return dtoToShout(replyDto);
+  return response.data;
 }
 
 export default { createShout, createReply };
