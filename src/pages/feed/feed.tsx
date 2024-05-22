@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
-import FeedRepository from "@/infrastructure/feed";
+import FeedSource from "@/infrastructure/feed";
 
 export function Feed() {
   const [feed, setFeed] = useState<{
@@ -14,7 +14,7 @@ export function Feed() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    FeedRepository.getFeed()
+    FeedSource.getFeed()
       .then((feed) => setFeed(feed))
       .catch(() => setHasError(true));
   }, []);

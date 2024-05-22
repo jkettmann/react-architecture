@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
-import UserRepository from "@/infrastructure/user";
+import UserSource from "@/infrastructure/user";
 
 import { UserInfo } from "./user-info";
 
@@ -21,11 +21,11 @@ export function UserProfile() {
       return;
     }
 
-    UserRepository.getUser(handle)
+    UserSource.getUser(handle)
       .then((user) => setUser(user))
       .catch(() => setHasError(true));
 
-    UserRepository.getUserShouts(handle)
+    UserSource.getUserShouts(handle)
       .then(({ shouts, images }) => {
         setShouts(shouts);
         setImages(images);

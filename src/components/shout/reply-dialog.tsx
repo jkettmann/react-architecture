@@ -14,9 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import MediaRepository from "@/infrastructure/media";
-import ShoutRepository from "@/infrastructure/shout";
-import UserRepository from "@/infrastructure/user";
+import MediaSource from "@/infrastructure/media";
+import ShoutSource from "@/infrastructure/shout";
+import UserSource from "@/infrastructure/user";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -39,7 +39,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    UserRepository.getMe()
+    UserSource.getMe()
       .then((me) => setIsAuthenticated(Boolean(me)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
@@ -58,15 +58,15 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
       let image;
       if (files?.length) {
-        image = await MediaRepository.saveImage(files[0]);
+        image = await MediaSource.saveImage(files[0]);
       }
 
-      const newShout = await ShoutRepository.createShout({
+      const newShout = await ShoutSource.createShout({
         message,
         imageId: image?.id,
       });
 
-      await ShoutRepository.createReply({
+      await ShoutSource.createReply({
         shoutId,
         replyId: newShout.id,
       });

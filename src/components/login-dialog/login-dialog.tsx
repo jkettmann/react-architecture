@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AuthRepository from "@/infrastructure/auth";
+import AuthSource from "@/infrastructure/auth";
 
 interface LoginFormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
@@ -37,7 +37,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
     const username = event.currentTarget.elements.username.value;
     const password = event.currentTarget.elements.password.value;
 
-    await AuthRepository.login({ username, password });
+    await AuthSource.login({ username, password });
 
     setIsLoading(false);
     setOpen(false);

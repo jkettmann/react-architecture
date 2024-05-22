@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import { Me } from "@/domain";
-import AuthRepository from "@/infrastructure/auth";
-import UserRepository from "@/infrastructure/user";
+import AuthSource from "@/infrastructure/auth";
+import UserSource from "@/infrastructure/user";
 
 export function Header() {
   const [isLoadingMe, setIsLoadingMe] = useState(true);
@@ -14,7 +14,7 @@ export function Header() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    UserRepository.getMe()
+    UserSource.getMe()
       .then((me) => setMe(me))
       .catch(() => setHasError(true))
       .finally(() => setIsLoadingMe(false));
@@ -22,7 +22,7 @@ export function Header() {
 
   async function logout() {
     setIsLoadingLogout(true);
-    await AuthRepository.logout();
+    await AuthSource.logout();
     setIsLoadingLogout(false);
     window.location.reload();
   }
