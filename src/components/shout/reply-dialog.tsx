@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { replyToShout } from "@/application/reply-to-shout";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,18 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import MediaService from "@/infrastructure/media";
-import ShoutService from "@/infrastructure/shout";
 import UserService from "@/infrastructure/user";
-
-const ErrorMessages = {
-  TooManyShouts:
-    "You have reached the maximum number of shouts per day. Please try again tomorrow.",
-  RecipientNotFound: "The user you want to reply to does not exist.",
-  AuthorBlockedByRecipient:
-    "You can't reply to this user. They have blocked you.",
-  UnknownError: "An unknown error occurred. Please try again later.",
-} as const;
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -68,44 +58,22 @@ export function ReplyDialog({
     event.preventDefault();
     setIsLoading(true);
 
-    const me = await UserService.getMe();
-    if (me.numShoutsPastDay >= 5) {
-      return setReplyError(ErrorMessages.TooManyShouts);
-    }
+    const message = event.currentTarget.elements.message.value;
+    const files = Array.from(event.currentTarget.elements.image.files ?? []);
 
-    const recipient = await UserService.getUser(recipientHandle);
-    if (!recipient) {
-      return setReplyError(ErrorMessages.RecipientNotFound);
-    }
-    if (recipient.blockedUserIds.includes(me.id)) {
-      return setReplyError(ErrorMessages.AuthorBlockedByRecipient);
-    }
+    const result = await replyToShout({
+      recipientHandle,
+      message,
+      files,
+      shoutId,
+    });
 
-    try {
-      const message = event.currentTarget.elements.message.value;
-      const files = event.currentTarget.elements.image.files;
-
-      let image;
-      if (files?.length) {
-        image = await MediaService.saveImage(files[0]);
-      }
-
-      const newShout = await ShoutService.createShout({
-        message,
-        imageId: image?.id,
-      });
-
-      await ShoutService.createReply({
-        shoutId,
-        replyId: newShout.id,
-      });
-
+    if (result.error) {
+      setReplyError(result.error);
+    } else {
       setOpen(false);
-    } catch (error) {
-      setReplyError(ErrorMessages.UnknownError);
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   return (
