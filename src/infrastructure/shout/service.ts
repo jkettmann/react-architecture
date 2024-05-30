@@ -2,13 +2,16 @@ import ShoutApi from "./api";
 import { CreateShoutInput, CreateShoutReplyInput } from "./dto";
 import { dtoToShout } from "./transform";
 
-async function createShout(input: CreateShoutInput) {
-  const { data: shoutDto } = await ShoutApi.createShout(input);
+async function createShout(input: CreateShoutInput, api = ShoutApi) {
+  const { data: shoutDto } = await api.createShout(input);
   return dtoToShout(shoutDto);
 }
 
-async function createReply({ shoutId, replyId }: CreateShoutReplyInput) {
-  const { data: replyDto } = await ShoutApi.createReply({ shoutId, replyId });
+async function createReply(
+  { shoutId, replyId }: CreateShoutReplyInput,
+  api = ShoutApi
+) {
+  const { data: replyDto } = await api.createReply({ shoutId, replyId });
   return dtoToShout(replyDto);
 }
 

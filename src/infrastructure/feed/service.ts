@@ -6,8 +6,8 @@ import { dtoToUser } from "../user/transform";
 
 import FeedApi from "./api";
 
-async function getFeed() {
-  const response = await FeedApi.getFeed();
+async function getFeed(api = FeedApi) {
+  const response = await api.getFeed();
   const shouts = response.data.map(dtoToShout);
   const users = response.included
     .filter((u): u is UserDto => u.type === "user")
