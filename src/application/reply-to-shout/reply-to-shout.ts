@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import MediaService from "@/infrastructure/media";
 import ShoutService from "@/infrastructure/shout";
 import UserService from "@/infrastructure/user";
@@ -9,7 +11,7 @@ interface ReplyToShoutInput {
   files?: File[] | null;
 }
 
-const ErrorMessages = {
+export const ErrorMessages = {
   TooManyShouts:
     "You have reached the maximum number of shouts per day. Please try again tomorrow.",
   RecipientNotFound: "The user you want to reply to does not exist.",
@@ -18,18 +20,24 @@ const ErrorMessages = {
   UnknownError: "An unknown error occurred. Please try again later.",
 } as const;
 
-export async function replyToShout({
-  recipientHandle,
-  shoutId,
-  message,
-  files,
-}: ReplyToShoutInput) {
-  const me = await UserService.getMe();
+const dependencies = {
+  getMe: UserService.getMe,
+  getUser: UserService.getUser,
+  saveImage: MediaService.saveImage,
+  createShout: ShoutService.createShout,
+  createReply: ShoutService.createReply,
+};
+
+export async function replyToShout(
+  { recipientHandle, shoutId, message, files }: ReplyToShoutInput,
+  { getMe, getUser, saveImage, createReply, createShout }: typeof dependencies
+) {
+  const me = await getMe();
   if (me.numShoutsPastDay >= 5) {
     return { error: ErrorMessages.TooManyShouts };
   }
 
-  const recipient = await UserService.getUser(recipientHandle);
+  const recipient = await getUser(recipientHandle);
   if (!recipient) {
     return { error: ErrorMessages.RecipientNotFound };
   }
@@ -40,15 +48,15 @@ export async function replyToShout({
   try {
     let image;
     if (files?.length) {
-      image = await MediaService.saveImage(files[0]);
+      image = await saveImage(files[0]);
     }
 
-    const newShout = await ShoutService.createShout({
+    const newShout = await createShout({
       message,
       imageId: image?.id,
     });
 
-    await ShoutService.createReply({
+    await createReply({
       shoutId,
       replyId: newShout.id,
     });
@@ -57,4 +65,11 @@ export async function replyToShout({
   } catch {
     return { error: ErrorMessages.UnknownError };
   }
+}
+
+export function useReplyToShout() {
+  return useCallback(
+    (input: ReplyToShoutInput) => replyToShout(input, dependencies),
+    []
+  );
 }

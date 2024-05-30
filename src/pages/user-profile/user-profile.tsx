@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import { getUserProfile } from "@/application/get-user-profile";
+import { useGetUserProfile } from "@/application/get-user-profile";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
@@ -10,6 +10,7 @@ import { UserInfo } from "./user-info";
 
 export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
+  const getUserProfile = useGetUserProfile();
 
   const [profile, setProfile] = useState<{
     user: User;
@@ -26,7 +27,7 @@ export function UserProfile() {
     getUserProfile({ handle })
       .then((profile) => setProfile(profile))
       .catch(() => setHasError(true));
-  }, [handle]);
+  }, [handle, getUserProfile]);
 
   if (!handle) {
     return <Navigate to="/" />;

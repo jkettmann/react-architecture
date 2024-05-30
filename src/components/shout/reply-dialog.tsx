@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { replyToShout } from "@/application/reply-to-shout";
+import { useReplyToShout } from "@/application/reply-to-shout";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +42,7 @@ export function ReplyDialog({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [replyError, setReplyError] = useState<string>();
+  const replyToShout = useReplyToShout();
 
   useEffect(() => {
     UserService.getMe()
