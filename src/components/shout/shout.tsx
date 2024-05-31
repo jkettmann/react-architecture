@@ -25,6 +25,7 @@ const defaultAuthor: User = {
   handle: "Deleted",
   avatar:
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMGMtNi42MjcgMC0xMiA1LjM3My0xMiAxMnM1LjM3MyAxMiAxMiAxMiAxMi01LjM3MyAxMi0xMi01LjM3My0xMi0xMi0xMnptOSAxMmMwIDEuOTQtLjYyNCAzLjczNS0xLjY3MiA1LjIwN2wtMTIuNTM1LTEyLjUzNWMxLjQ3Mi0xLjA0OCAzLjI2Ny0xLjY3MiA1LjIwNy0xLjY3MiA0Ljk2MiAwIDkgNC4wMzggOSA5em0tMTggMGMwLTEuOTQuNjI0LTMuNzM1IDEuNjcyLTUuMjA3bDEyLjUzNCAxMi41MzRjLTEuNDcxIDEuMDQ5LTMuMjY2IDEuNjczLTUuMjA2IDEuNjczLTQuOTYyIDAtOS00LjAzOC05LTl6Ii8+PC9zdmc+",
+  blockedUserIds: [],
   followerIds: [],
 };
 
@@ -59,7 +60,7 @@ export function Shout({ shout, author = defaultAuthor, image }: ShoutProps) {
         )}
       </CardContent>
       <CardFooter className="flex justify-between p-3 border-t-neutral-300">
-        <ReplyDialog shoutId={shout.id}>
+        <ReplyDialog shoutId={shout.id} recipientHandle={author.handle}>
           <Button variant="ghost" size="sm" className="gap-2">
             <MessageCircle className="h-4 w-4" />
             {shout.replies.length}

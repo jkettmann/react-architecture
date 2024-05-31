@@ -9,6 +9,7 @@ export interface DbUser {
     handle: string;
     avatar: string;
     info?: string;
+    numShoutsPastDay: number;
     blockedUserIds: UserId[];
     followsUserIds: UserId[];
   };

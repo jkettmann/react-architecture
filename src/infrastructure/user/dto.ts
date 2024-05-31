@@ -8,6 +8,8 @@ export interface UserDto {
     handle: string;
     avatar: string;
     info?: string;
+    numShoutsPastDay: number;
+    blockedUserIds: string[];
   };
   relationships: {
     followerIds: string[];

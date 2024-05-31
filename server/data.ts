@@ -8,6 +8,7 @@ export const users: DbUser[] = [
       handle: "darklord",
       avatar: "/cdn/avatars/darklord.jpeg",
       info: "I am the dark lord, the root of all evil. 'Tis I who brought the world to its knees. In blood I was born, and in blood I shall have my vengeance.",
+      numShoutsPastDay: 3,
       blockedUserIds: ["user-2"],
       followsUserIds: ["user-3"],
     },
@@ -17,6 +18,7 @@ export const users: DbUser[] = [
     type: "user",
     attributes: {
       handle: "prettypinkpony",
+      numShoutsPastDay: 4,
       avatar: "/cdn/avatars/prettypinkpony.jpeg",
       info: "I like colors. I'm a colorful person (although I'm pretty white *giggles*). I'd like to make this world a better place. And sometimes I feel like the only one who can...",
       blockedUserIds: ["user-1"],
@@ -29,6 +31,7 @@ export const users: DbUser[] = [
     attributes: {
       handle: "fcku",
       avatar: "/cdn/avatars/fcku.jpeg",
+      numShoutsPastDay: 2,
       blockedUserIds: [],
       followsUserIds: ["user-1", "user-2"],
     },

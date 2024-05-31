@@ -3,10 +3,13 @@ export interface User {
   handle: string;
   avatar: string;
   info?: string;
+  blockedUserIds: string[];
   followerIds: string[];
 }
 
-export interface Me extends User {}
+export interface Me extends User {
+  numShoutsPastDay: number;
+}
 
 export interface Shout {
   id: string;

@@ -18,6 +18,15 @@ import MediaService from "@/infrastructure/media";
 import ShoutService from "@/infrastructure/shout";
 import UserService from "@/infrastructure/user";
 
+const ErrorMessages = {
+  TooManyShouts:
+    "You have reached the maximum number of shouts per day. Please try again tomorrow.",
+  RecipientNotFound: "The user you want to reply to does not exist.",
+  AuthorBlockedByRecipient:
+    "You can't reply to this user. They have blocked you.",
+  UnknownError: "An unknown error occurred. Please try again later.",
+} as const;
+
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
   image: HTMLInputElement;
@@ -28,15 +37,21 @@ interface ReplyForm extends HTMLFormElement {
 }
 
 interface ReplyDialogProps {
+  recipientHandle: string;
   children: React.ReactNode;
   shoutId: string;
 }
 
-export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
+export function ReplyDialog({
+  recipientHandle,
+  children,
+  shoutId,
+}: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [replyError, setReplyError] = useState<string>();
 
   useEffect(() => {
     UserService.getMe()
@@ -52,6 +67,20 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
     setIsLoading(true);
+
+    const me = await UserService.getMe();
+    if (me.numShoutsPastDay >= 5) {
+      return setReplyError(ErrorMessages.TooManyShouts);
+    }
+
+    const recipient = await UserService.getUser(recipientHandle);
+    if (!recipient) {
+      return setReplyError(ErrorMessages.RecipientNotFound);
+    }
+    if (recipient.blockedUserIds.includes(me.id)) {
+      return setReplyError(ErrorMessages.AuthorBlockedByRecipient);
+    }
+
     try {
       const message = event.currentTarget.elements.message.value;
       const files = event.currentTarget.elements.image.files;
@@ -73,7 +102,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
       setOpen(false);
     } catch (error) {
-      console.error(error);
+      setReplyError(ErrorMessages.UnknownError);
     } finally {
       setIsLoading(false);
     }
@@ -114,6 +143,11 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
               Shout out!
             </Button>
           </DialogFooter>
+          {replyError && (
+            <div className="text-red-500 text-sm font-bold text-center mt-4">
+              {replyError}
+            </div>
+          )}
         </form>
       </DialogContent>
     </Dialog>
