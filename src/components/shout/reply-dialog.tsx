@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { isAuthenticated as isUserAuthenticated } from "@/domain/me";
 import UserService from "@/infrastructure/user";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
@@ -46,7 +47,8 @@ export function ReplyDialog({
 
   useEffect(() => {
     UserService.getMe()
-      .then((me) => setIsAuthenticated(Boolean(me)))
+      .then(isUserAuthenticated)
+      .then(setIsAuthenticated)
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
   }, []);
