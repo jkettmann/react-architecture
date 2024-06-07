@@ -1,4 +1,5 @@
-import { Me, User } from "@/domain";
+import { Me } from "@/domain/me";
+import { User } from "@/domain/user";
 
 import { MeDto, UserDto } from "./dto";
 

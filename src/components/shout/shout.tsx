@@ -10,7 +10,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Image, Shout as IShout, User } from "@/domain";
+import { Image } from "@/domain/media";
+import { Shout as IShout } from "@/domain/shout";
+import { User } from "@/domain/user";
 
 import { ReplyDialog } from "./reply-dialog";
 

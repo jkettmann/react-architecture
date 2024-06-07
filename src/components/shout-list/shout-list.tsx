@@ -1,5 +1,7 @@
 import { Shout } from "@/components/shout";
-import { Image, Shout as IShout, User } from "@/domain";
+import { Image } from "@/domain/media";
+import { Shout as IShout } from "@/domain/shout";
+import { User } from "@/domain/user";
 
 interface ShoutListProps {
   shouts: IShout[];

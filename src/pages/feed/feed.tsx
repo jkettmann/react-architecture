@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image, Shout, User } from "@/domain";
+import { Image } from "@/domain/media";
+import { Shout } from "@/domain/shout";
+import { User } from "@/domain/user";
 import FeedService from "@/infrastructure/feed";
 
 export function Feed() {
