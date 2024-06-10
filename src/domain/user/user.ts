@@ -20,3 +20,8 @@ export function getUserById(users?: User[], userId?: string) {
   if (!userId || !users) return;
   return users.find((u) => u.id === userId);
 }
+
+export function hasBlockedUser(user?: User, userId?: string) {
+  if (!user || !userId) return false;
+  return user.blockedUserIds.includes(userId);
+}

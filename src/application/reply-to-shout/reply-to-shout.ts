@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 
+import { hasExceededShoutLimit } from "@/domain/me";
+import { hasBlockedUser } from "@/domain/user";
 import MediaService from "@/infrastructure/media";
 import ShoutService from "@/infrastructure/shout";
 import UserService from "@/infrastructure/user";
@@ -33,7 +35,7 @@ export async function replyToShout(
   { getMe, getUser, saveImage, createReply, createShout }: typeof dependencies
 ) {
   const me = await getMe();
-  if (me.numShoutsPastDay >= 5) {
+  if (hasExceededShoutLimit(me)) {
     return { error: ErrorMessages.TooManyShouts };
   }
 
@@ -41,7 +43,7 @@ export async function replyToShout(
   if (!recipient) {
     return { error: ErrorMessages.RecipientNotFound };
   }
-  if (recipient.blockedUserIds.includes(me.id)) {
+  if (hasBlockedUser(recipient, me.id)) {
     return { error: ErrorMessages.AuthorBlockedByRecipient };
   }
 

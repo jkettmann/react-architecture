@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getUserById } from "./user";
+import { getUserById, hasBlockedUser } from "./user";
 
 const mockUser = {
   id: "1",
@@ -31,6 +31,30 @@ describe("User domain", () => {
     it("should return undefined if provided user id is not defined", () => {
       const user = getUserById([mockUser], undefined);
       expect(user).toEqual(undefined);
+    });
+  });
+
+  describe("hasBlockedUser", () => {
+    it("should be false if user has not blocked the user", () => {
+      const user = { ...mockUser, blockedUserIds: ["2"] };
+      const hasBlocked = hasBlockedUser(user, "3");
+      expect(hasBlocked).toEqual(false);
+    });
+
+    it("should be true if user has blocked the user", () => {
+      const user = { ...mockUser, blockedUserIds: ["2"] };
+      const hasBlocked = hasBlockedUser(user, "2");
+      expect(hasBlocked).toEqual(true);
+    });
+
+    it("should be false if user is not defined", () => {
+      const hasBlocked = hasBlockedUser(undefined, "2");
+      expect(hasBlocked).toEqual(false);
+    });
+
+    it("should be false if user id is not defined", () => {
+      const hasBlocked = hasBlockedUser(mockUser, undefined);
+      expect(hasBlocked).toEqual(false);
     });
   });
 });
