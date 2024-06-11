@@ -6,7 +6,7 @@ export interface Me extends User {
   numShoutsPastDay: number;
 }
 
-export function isAuthenticated(me?: Me) {
+export function isAuthenticated(me?: Me | null): me is Me {
   return Boolean(me);
 }
 

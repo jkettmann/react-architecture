@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useLogin } from "@/application/mutations/use-login";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AuthService from "@/infrastructure/auth";
 
 interface LoginFormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
@@ -29,19 +29,16 @@ interface LoginDialogProps {
 
 export function LoginDialog({ children }: LoginDialogProps) {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const login = useLogin();
 
   async function handleSubmit(event: React.FormEvent<LoginForm>) {
     event.preventDefault();
-    setIsLoading(true);
     const username = event.currentTarget.elements.username.value;
     const password = event.currentTarget.elements.password.value;
 
-    await AuthService.login({ username, password });
+    await login.mutateAsync({ username, password });
 
-    setIsLoading(false);
     setOpen(false);
-    window.location.reload();
   }
 
   return (
@@ -80,7 +77,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
             </Label>
           </div>
           <DialogFooter>
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" disabled={login.isPending}>
               Login
             </Button>
           </DialogFooter>
