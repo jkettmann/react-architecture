@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import FeedApi from "@/api/feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { FeedResponse, Image, User } from "@/types";
+import { Image, Shout, User } from "@/types";
 
 export function Feed() {
-  const [feed, setFeed] = useState<FeedResponse>();
+  const [feed, setFeed] = useState<{
+    shouts: Shout[];
+    images: Image[];
+    users: User[];
+  }>();
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -22,12 +26,9 @@ export function Feed() {
   if (!feed) {
     return <LoadingView />;
   }
-
-  const users = feed.included.filter((u): u is User => u.type === "user");
-  const images = feed.included.filter((i): i is Image => i.type === "image");
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col justify-center p-6 gap-6">
-      <ShoutList shouts={feed.data} users={users} images={images} />
+      <ShoutList shouts={feed.shouts} users={feed.users} images={feed.images} />
     </div>
   );
 }

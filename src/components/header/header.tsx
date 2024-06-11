@@ -15,7 +15,7 @@ export function Header() {
 
   useEffect(() => {
     UserApi.getMe()
-      .then((response) => setMe(response.data))
+      .then((me) => setMe(me))
       .catch(() => setHasError(true))
       .finally(() => setIsLoadingMe(false));
   }, []);
