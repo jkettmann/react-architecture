@@ -1,6 +1,7 @@
-import { Blob } from "fetch-blob";
 import { FormData, File } from "formdata-node";
 import { describe, test, expect, vitest } from "vitest";
+
+import { createMockFile } from "@/test/create-mock-file";
 
 import MediaService from "./service";
 
@@ -18,12 +19,6 @@ const mockMediaAPI = {
     });
   }),
 };
-
-function createMockFile(name: string) {
-  const byteCharacters = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
-  const blob = new Blob([byteCharacters], { type: "image/png" });
-  return new File([blob], name, { type: "image/png" });
-}
 
 describe("MediaService", () => {
   test("uploads and returns an image", async () => {

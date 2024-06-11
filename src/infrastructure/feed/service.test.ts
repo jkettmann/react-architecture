@@ -42,6 +42,7 @@ const feedApiMock = {
           handle: "darklord",
           avatar: "/cdn/avatars/darklord.jpeg",
           info: "I am the dark lord, the root of all evil. 'Tis I who brought the world to its knees. In blood I was born, and in blood I shall have my vengeance.",
+          numShoutsPastDay: 3,
           blockedUserIds: ["user-2"],
           followsUserIds: ["user-3"],
         },
@@ -62,6 +63,7 @@ const feedApiMock = {
           handle: "prettypinkpony",
           avatar: "/cdn/avatars/prettypinkpony.jpeg",
           info: "I like colors. I'm a colorful person (although I'm pretty white *giggles*). I'd like to make this world a better place. And sometimes I feel like the only one who can...",
+          numShoutsPastDay: 2,
           blockedUserIds: ["user-1"],
           followsUserIds: ["user-3"],
         },
@@ -81,6 +83,7 @@ const feedApiMock = {
         attributes: {
           handle: "fcku",
           avatar: "/cdn/avatars/fcku.jpeg",
+          numShoutsPastDay: 1,
           blockedUserIds: [],
           followsUserIds: ["user-1", "user-2"],
         },
@@ -139,6 +142,7 @@ describe("FeedService", () => {
         handle: "darklord",
         id: "user-1",
         info: "I am the dark lord, the root of all evil. 'Tis I who brought the world to its knees. In blood I was born, and in blood I shall have my vengeance.",
+        blockedUserIds: ["user-2"],
       },
       {
         avatar: "/cdn/avatars/prettypinkpony.jpeg",
@@ -146,6 +150,7 @@ describe("FeedService", () => {
         handle: "prettypinkpony",
         id: "user-2",
         info: "I like colors. I'm a colorful person (although I'm pretty white *giggles*). I'd like to make this world a better place. And sometimes I feel like the only one who can...",
+        blockedUserIds: ["user-1"],
       },
       {
         avatar: "/cdn/avatars/fcku.jpeg",
@@ -153,6 +158,7 @@ describe("FeedService", () => {
         handle: "fcku",
         id: "user-3",
         info: undefined,
+        blockedUserIds: [],
       },
     ]);
     expect(result.images).toEqual([

@@ -14,6 +14,7 @@ export interface ShoutDto {
     replyTo?: string;
   };
 }
+
 export interface CreateShoutInput {
   message: string;
   imageId?: string;

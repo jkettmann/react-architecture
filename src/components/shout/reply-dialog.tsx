@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useReplyToShout } from "@/application/reply-to-shout";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import MediaService from "@/infrastructure/media";
-import ShoutService from "@/infrastructure/shout";
 import UserService from "@/infrastructure/user";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
@@ -28,15 +27,22 @@ interface ReplyForm extends HTMLFormElement {
 }
 
 interface ReplyDialogProps {
+  recipientHandle: string;
   children: React.ReactNode;
   shoutId: string;
 }
 
-export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
+export function ReplyDialog({
+  recipientHandle,
+  children,
+  shoutId,
+}: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [replyError, setReplyError] = useState<string>();
+  const replyToShout = useReplyToShout();
 
   useEffect(() => {
     UserService.getMe()
@@ -52,31 +58,23 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
     setIsLoading(true);
-    try {
-      const message = event.currentTarget.elements.message.value;
-      const files = event.currentTarget.elements.image.files;
 
-      let image;
-      if (files?.length) {
-        image = await MediaService.saveImage(files[0]);
-      }
+    const message = event.currentTarget.elements.message.value;
+    const files = Array.from(event.currentTarget.elements.image.files ?? []);
 
-      const newShout = await ShoutService.createShout({
-        message,
-        imageId: image?.id,
-      });
+    const result = await replyToShout({
+      recipientHandle,
+      message,
+      files,
+      shoutId,
+    });
 
-      await ShoutService.createReply({
-        shoutId,
-        replyId: newShout.id,
-      });
-
+    if (result.error) {
+      setReplyError(result.error);
+    } else {
       setOpen(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -114,6 +112,11 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
               Shout out!
             </Button>
           </DialogFooter>
+          {replyError && (
+            <div className="text-red-500 text-sm font-bold text-center mt-4">
+              {replyError}
+            </div>
+          )}
         </form>
       </DialogContent>
     </Dialog>

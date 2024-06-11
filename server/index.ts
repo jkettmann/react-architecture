@@ -237,10 +237,16 @@ fastify.post(
     reply
   ) {
     await waitRandomTime();
+
+    if (req.body.message === "error") {
+      return reply.status(400).send({ error: "unkown error" });
+    }
+
     const user = getUserFromCookie(req.cookies);
     if (!user) {
       return reply.status(401).send({ error: true });
     }
+    user.attributes.numShoutsPastDay += 1;
     const shout: DbShout = {
       id: `shout-${shouts.length + 1}`,
       type: "shout",

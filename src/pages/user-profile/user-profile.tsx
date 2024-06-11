@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
+import { useGetUserProfile } from "@/application/get-user-profile";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
-import UserService from "@/infrastructure/user";
 
 import { UserInfo } from "./user-info";
 
 export function UserProfile() {
   const { handle } = useParams<{ handle: string }>();
+  const getUserProfile = useGetUserProfile();
 
-  const [user, setUser] = useState<User>();
-  const [shouts, setShouts] = useState<Shout[]>();
-  const [images, setImages] = useState<Image[]>([]);
+  const [profile, setProfile] = useState<{
+    user: User;
+    shouts: Shout[];
+    images: Image[];
+  }>();
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
@@ -21,17 +24,10 @@ export function UserProfile() {
       return;
     }
 
-    UserService.getUser(handle)
-      .then((user) => setUser(user))
+    getUserProfile({ handle })
+      .then((profile) => setProfile(profile))
       .catch(() => setHasError(true));
-
-    UserService.getUserShouts(handle)
-      .then(({ shouts, images }) => {
-        setShouts(shouts);
-        setImages(images);
-      })
-      .catch(() => setHasError(true));
-  }, [handle]);
+  }, [handle, getUserProfile]);
 
   if (!handle) {
     return <Navigate to="/" />;
@@ -40,14 +36,18 @@ export function UserProfile() {
   if (hasError) {
     return <div>An error occurred</div>;
   }
-  if (!user || !shouts) {
+  if (!profile) {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="max-w-2xl w-full mx-auto flex flex-col p-6 gap-6">
-      <UserInfo user={user} />
-      <ShoutList users={[user]} shouts={shouts} images={images} />
+      <UserInfo user={profile.user} />
+      <ShoutList
+        users={[profile.user]}
+        shouts={profile.shouts}
+        images={profile.images}
+      />
     </div>
   );
 }
