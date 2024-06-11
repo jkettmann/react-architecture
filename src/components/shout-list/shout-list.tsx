@@ -1,8 +1,8 @@
 import { Shout } from "@/components/shout";
-import { User, Shout as TShout, Image } from "@/types";
+import { Image, Shout as IShout, User } from "@/domain";
 
 interface ShoutListProps {
-  shouts: TShout[];
+  shouts: IShout[];
   images: Image[];
   users: User[];
 }
@@ -11,9 +11,9 @@ export function ShoutList({ shouts, users, images }: ShoutListProps) {
   return (
     <ul className="flex flex-col gap-4 items-center">
       {shouts.map((shout) => {
-        const author = users.find((u) => u.id === shout.attributes.authorId);
-        const image = shout.attributes.imageId
-          ? images.find((i) => i.id === shout.attributes.imageId)
+        const author = users.find((u) => u.id === shout.authorId);
+        const image = shout.imageId
+          ? images.find((i) => i.id === shout.imageId)
           : undefined;
         return (
           <li key={shout.id} className="max-w-sm w-full">

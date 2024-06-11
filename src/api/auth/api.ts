@@ -1,6 +1,6 @@
-import { Credentials } from "@/types";
+import { apiClient } from "../client";
 
-import { apiClient } from "./client";
+import { Credentials } from "./dto";
 
 async function login(credentials: Credentials) {
   await apiClient.post("/login", credentials);
