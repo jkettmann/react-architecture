@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 
+import { apiClient } from "@/api/client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,7 +37,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
     const username = event.currentTarget.elements.username.value;
     const password = event.currentTarget.elements.password.value;
 
-    await axios.post(`/api/login`, { username, password });
+    await apiClient.post("/login", { username, password });
 
     setIsLoading(false);
     setOpen(false);
