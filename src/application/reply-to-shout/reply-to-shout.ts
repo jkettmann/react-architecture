@@ -1,10 +1,13 @@
-import { useCallback } from "react";
+import { Me, hasExceededShoutLimit, isAuthenticated } from "@/domain/me";
+import { Image } from "@/domain/media";
+import { Shout } from "@/domain/shout";
+import { User, hasBlockedUser } from "@/domain/user";
 
-import { hasExceededShoutLimit, isAuthenticated } from "@/domain/me";
-import { hasBlockedUser } from "@/domain/user";
-import MediaService from "@/infrastructure/media";
-import ShoutService from "@/infrastructure/shout";
-import UserService from "@/infrastructure/user";
+import { useCreateShout } from "../mutations/create-shout";
+import { useCreateShoutReply } from "../mutations/create-shout-reply";
+import { useSaveImage } from "../mutations/save-image";
+import { useGetMe } from "../queries/get-me";
+import { useGetUser } from "../queries/get-user";
 
 interface ReplyToShoutInput {
   recipientHandle: string;
@@ -23,19 +26,18 @@ export const ErrorMessages = {
   UnknownError: "An unknown error occurred. Please try again later.",
 } as const;
 
-const dependencies = {
-  getMe: UserService.getMe,
-  getUser: UserService.getUser,
-  saveImage: MediaService.saveImage,
-  createShout: ShoutService.createShout,
-  createReply: ShoutService.createReply,
-};
+interface Dependencies {
+  me?: Me | null;
+  recipient?: User | null;
+  saveImage: (file: File) => Promise<Image>;
+  createShout: (input: { message: string; imageId?: string }) => Promise<Shout>;
+  createReply: (input: { shoutId: string; replyId: string }) => Promise<Shout>;
+}
 
 export async function replyToShout(
-  { recipientHandle, shoutId, message, files }: ReplyToShoutInput,
-  { getMe, getUser, saveImage, createReply, createShout }: typeof dependencies
+  { shoutId, message, files }: ReplyToShoutInput,
+  { me, recipient, saveImage, createReply, createShout }: Dependencies
 ) {
-  const me = await getMe();
   if (!isAuthenticated(me)) {
     return { error: ErrorMessages.NotAuthenticated };
   }
@@ -43,7 +45,6 @@ export async function replyToShout(
     return { error: ErrorMessages.TooManyShouts };
   }
 
-  const recipient = await getUser(recipientHandle);
   if (!recipient) {
     return { error: ErrorMessages.RecipientNotFound };
   }
@@ -73,9 +74,32 @@ export async function replyToShout(
   }
 }
 
-export function useReplyToShout() {
-  return useCallback(
-    (input: ReplyToShoutInput) => replyToShout(input, dependencies),
-    []
-  );
+interface UseReplyToShoutInput {
+  recipientHandle: string;
+}
+
+export function useReplyToShout({ recipientHandle }: UseReplyToShoutInput) {
+  const me = useGetMe();
+  const user = useGetUser({ handle: recipientHandle });
+  const saveImage = useSaveImage();
+  const createShout = useCreateShout();
+  const createReply = useCreateShoutReply();
+
+  return {
+    mutateAsync: (input: ReplyToShoutInput) =>
+      replyToShout(input, {
+        me: me.data,
+        recipient: user.data,
+        saveImage: saveImage.mutateAsync,
+        createShout: createShout.mutateAsync,
+        createReply: createReply.mutateAsync,
+      }),
+    isLoading:
+      me.isLoading ||
+      user.isLoading ||
+      saveImage.isPending ||
+      createShout.isPending ||
+      createReply.isPending,
+    isError: me.isError || user.isError,
+  };
 }

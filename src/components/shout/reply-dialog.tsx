@@ -39,9 +39,8 @@ export function ReplyDialog({
   shoutId,
 }: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [replyError, setReplyError] = useState<string>();
-  const replyToShout = useReplyToShout();
+  const replyToShout = useReplyToShout({ recipientHandle });
   const me = useGetMe();
 
   if (me.isError || !isAuthenticated(me.data)) {
@@ -50,12 +49,11 @@ export function ReplyDialog({
 
   async function handleSubmit(event: React.FormEvent<ReplyForm>) {
     event.preventDefault();
-    setIsLoading(true);
 
     const message = event.currentTarget.elements.message.value;
     const files = Array.from(event.currentTarget.elements.image.files ?? []);
 
-    const result = await replyToShout({
+    const result = await replyToShout.mutateAsync({
       recipientHandle,
       message,
       files,
@@ -67,7 +65,6 @@ export function ReplyDialog({
     } else {
       setOpen(false);
     }
-    setIsLoading(false);
   }
 
   return (
@@ -101,7 +98,11 @@ export function ReplyDialog({
             </Label>
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={replyToShout.isLoading}
+            >
               Shout out!
             </Button>
           </DialogFooter>
