@@ -1,4 +1,4 @@
-import { Image } from "@/domain";
+import { Image } from "@/domain/media";
 
 import { ImageDto } from "./dto";
 

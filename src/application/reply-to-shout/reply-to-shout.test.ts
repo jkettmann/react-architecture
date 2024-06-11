@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vitest } from "vitest";
 
+import { MAX_NUM_SHOUTS_PER_DAY } from "@/domain/me";
 import { createMockFile } from "@/test/create-mock-file";
 
 import { ErrorMessages, replyToShout } from "./reply-to-shout";
@@ -50,7 +51,10 @@ describe("replyToShout", () => {
   });
 
   it("should return an error if the user has made too many shouts", async () => {
-    mockGetMe.mockResolvedValueOnce({ ...mockMe, numShoutsPastDay: 5 });
+    mockGetMe.mockResolvedValueOnce({
+      ...mockMe,
+      numShoutsPastDay: MAX_NUM_SHOUTS_PER_DAY,
+    });
 
     const result = await replyToShout(
       { recipientHandle, shoutId, message, files },

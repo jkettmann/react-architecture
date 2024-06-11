@@ -4,7 +4,9 @@ import { Navigate, useParams } from "react-router";
 import { useGetUserProfile } from "@/application/get-user-profile";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image, Shout, User } from "@/domain";
+import { Image } from "@/domain/media";
+import { Shout } from "@/domain/shout";
+import { User } from "@/domain/user";
 
 import { UserInfo } from "./user-info";
 

@@ -1,4 +1,4 @@
-import { Shout } from "@/domain";
+import { Shout } from "@/domain/shout";
 
 import { ShoutDto } from "./dto";
 

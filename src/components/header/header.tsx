@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
-import { Me } from "@/domain";
+import { Me } from "@/domain/me";
 import AuthService from "@/infrastructure/auth";
 import UserService from "@/infrastructure/user";
 
