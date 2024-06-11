@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-import MediaApi from "@/api/media";
-import ShoutApi from "@/api/shout";
-import UserApi from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import MediaService from "@/infrastructure/media";
+import ShoutService from "@/infrastructure/shout";
+import UserService from "@/infrastructure/user";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -39,7 +39,7 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    UserApi.getMe()
+    UserService.getMe()
       .then((me) => setIsAuthenticated(Boolean(me)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
@@ -58,15 +58,15 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
 
       let image;
       if (files?.length) {
-        image = await MediaApi.uploadImage(files[0]);
+        image = await MediaService.saveImage(files[0]);
       }
 
-      const newShout = await ShoutApi.createShout({
+      const newShout = await ShoutService.createShout({
         message,
         imageId: image?.id,
       });
 
-      await ShoutApi.createReply({
+      await ShoutService.createReply({
         shoutId,
         replyId: newShout.id,
       });

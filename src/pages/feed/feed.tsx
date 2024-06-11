@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import FeedApi from "@/api/feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { Image, Shout, User } from "@/domain";
+import FeedService from "@/infrastructure/feed";
 
 export function Feed() {
   const [feed, setFeed] = useState<{
@@ -14,7 +14,7 @@ export function Feed() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    FeedApi.getFeed()
+    FeedService.getFeed()
       .then((feed) => setFeed(feed))
       .catch(() => setHasError(true));
   }, []);
