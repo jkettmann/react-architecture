@@ -8,6 +8,7 @@
     "dev:client": "vite",
     "dev:server": "tsx watch --ignore server/public server",
     "build": "tsc && vite build",
+    "test": "echo 'No tests specified'",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier": "prettier ./src --check",
     "types": "tsc --noEmit",
