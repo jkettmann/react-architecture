@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { apiClient } from "@/api/client";
+import MediaApi from "@/api/media";
+import ShoutApi from "@/api/shout";
+import UserApi from "@/api/user";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Image, Me, Shout } from "@/types";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -38,9 +39,8 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    apiClient
-      .get<{ data: Me }>("/me")
-      .then((response) => setIsAuthenticated(Boolean(response.data.data)))
+    UserApi.getMe()
+      .then((response) => setIsAuthenticated(Boolean(response.data)))
       .catch(() => setHasError(true))
       .finally(() => setIsLoading(false));
   }, []);
@@ -59,18 +59,16 @@ export function ReplyDialog({ children, shoutId }: ReplyDialogProps) {
       if (files?.length) {
         const formData = new FormData();
         formData.append("image", files[0]);
-        const imageResponse = await apiClient.post<{ data: Image }>(
-          "/image",
-          formData
-        );
-        imageId = imageResponse.data.data.id;
+        const image = await MediaApi.uploadImage(formData);
+        imageId = image.data.id;
       }
-      const newShoutResponse = await apiClient.post<{ data: Shout }>(`/shout`, {
+      const newShout = await ShoutApi.createShout({
         message,
         imageId,
       });
-      await apiClient.post(`/shout/${shoutId}/reply`, {
-        replyId: newShoutResponse.data.data.id,
+      await ShoutApi.createReply({
+        shoutId,
+        replyId: newShout.data.id,
       });
       setOpen(false);
     } catch (error) {

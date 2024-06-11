@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 
-import { apiClient } from "@/api/client";
+import UserApi from "@/api/user";
 import { LoadingSpinner } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
 import { UserResponse, UserShoutsResponse } from "@/types";
@@ -16,14 +16,16 @@ export function UserProfile() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    apiClient
-      .get<UserResponse>(`/user/${handle}`)
-      .then((response) => setUser(response.data))
+    if (!handle) {
+      return;
+    }
+
+    UserApi.getUser(handle)
+      .then((response) => setUser(response))
       .catch(() => setHasError(true));
 
-    apiClient
-      .get<UserShoutsResponse>(`/user/${handle}/shouts`)
-      .then((response) => setUserShouts(response.data))
+    UserApi.getUserShouts(handle)
+      .then((response) => setUserShouts(response))
       .catch(() => setHasError(true));
   }, [handle]);
 
