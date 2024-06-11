@@ -9,7 +9,10 @@ async function getMe(api = UserApi) {
   return dtoToMe(meDto);
 }
 
-async function getUser(handle: string, api = UserApi) {
+async function getUser(handle?: string, api = UserApi) {
+  if (!handle) {
+    return null;
+  }
   const { data: userDto } = await api.getUser(handle);
   return dtoToUser(userDto);
 }
