@@ -15,11 +15,11 @@ export async function getUserProfile(
   { handle }: GetUserProfileInput,
   { getUser, getUserShouts }: typeof dependencies
 ) {
-  const [user, { shouts, images }] = await Promise.all([
+  const [user, userShouts] = await Promise.all([
     getUser(handle),
     getUserShouts(handle),
   ]);
-  return { user, shouts, images };
+  return { user, shouts: userShouts?.shouts, images: userShouts?.images };
 }
 
 export function useGetUserProfile() {

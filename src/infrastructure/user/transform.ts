@@ -14,7 +14,11 @@ export function dtoToUser(dto: UserDto): User {
   };
 }
 
-export function dtoToMe(dto: MeDto): Me {
+export function dtoToMe(dto?: MeDto): Me | null {
+  if (!dto) {
+    return null;
+  }
+
   return {
     ...dtoToUser(dto),
     numShoutsPastDay: dto.attributes.numShoutsPastDay,

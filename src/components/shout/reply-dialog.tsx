@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+import { useGetMe } from "@/application/queries/get-me";
 import { useReplyToShout } from "@/application/reply-to-shout";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { isAuthenticated as isUserAuthenticated } from "@/domain/me";
-import UserService from "@/infrastructure/user";
+import { isAuthenticated } from "@/domain/me";
 
 interface ReplyFormElements extends HTMLFormControlsCollection {
   message: HTMLTextAreaElement;
@@ -40,20 +40,11 @@ export function ReplyDialog({
 }: ReplyDialogProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hasError, setHasError] = useState(false);
   const [replyError, setReplyError] = useState<string>();
   const replyToShout = useReplyToShout();
+  const me = useGetMe();
 
-  useEffect(() => {
-    UserService.getMe()
-      .then(isUserAuthenticated)
-      .then(setIsAuthenticated)
-      .catch(() => setHasError(true))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  if (hasError || !isAuthenticated) {
+  if (me.isError || !isAuthenticated(me.data)) {
     return <LoginDialog>{children}</LoginDialog>;
   }
 

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { hasExceededShoutLimit } from "@/domain/me";
+import { hasExceededShoutLimit, isAuthenticated } from "@/domain/me";
 import { hasBlockedUser } from "@/domain/user";
 import MediaService from "@/infrastructure/media";
 import ShoutService from "@/infrastructure/shout";
@@ -19,6 +19,7 @@ export const ErrorMessages = {
   RecipientNotFound: "The user you want to reply to does not exist.",
   AuthorBlockedByRecipient:
     "You can't reply to this user. They have blocked you.",
+  NotAuthenticated: "You must be signed in to reply to a shout.",
   UnknownError: "An unknown error occurred. Please try again later.",
 } as const;
 
@@ -35,6 +36,9 @@ export async function replyToShout(
   { getMe, getUser, saveImage, createReply, createShout }: typeof dependencies
 ) {
   const me = await getMe();
+  if (!isAuthenticated(me)) {
+    return { error: ErrorMessages.NotAuthenticated };
+  }
   if (hasExceededShoutLimit(me)) {
     return { error: ErrorMessages.TooManyShouts };
   }

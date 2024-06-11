@@ -15,9 +15,9 @@ export function UserProfile() {
   const getUserProfile = useGetUserProfile();
 
   const [profile, setProfile] = useState<{
-    user: User;
-    shouts: Shout[];
-    images: Image[];
+    user?: User | null;
+    shouts?: Shout[];
+    images?: Image[];
   }>();
   const [hasError, setHasError] = useState(false);
 
@@ -38,7 +38,7 @@ export function UserProfile() {
   if (hasError) {
     return <div>An error occurred</div>;
   }
-  if (!profile) {
+  if (!profile || !profile.user || !profile.shouts || !profile.images) {
     return <LoadingSpinner />;
   }
 

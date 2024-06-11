@@ -17,7 +17,10 @@ async function getUser(handle?: string, api = UserApi) {
   return dtoToUser(userDto);
 }
 
-async function getUserShouts(handle: string, api = UserApi) {
+async function getUserShouts(handle?: string, api = UserApi) {
+  if (!handle) {
+    return null;
+  }
   const { data: shoutDtos, included: imageDtos } =
     await api.getUserShouts(handle);
   const shouts = shoutDtos.map(dtoToShout);
