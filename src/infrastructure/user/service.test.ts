@@ -55,7 +55,7 @@ describe("UserService", () => {
     const result = await UserService.getUserShouts("fcku", userApiMock);
 
     expect(userApiMock.getUserShouts).toHaveBeenCalledWith("fcku");
-    expect(result.shouts).toEqual([
+    expect(result?.shouts).toEqual([
       {
         authorId: "user-2",
         createdAt: 1717046170490,
@@ -77,7 +77,7 @@ describe("UserService", () => {
         text: "You suck @darklord!!!!",
       },
     ]);
-    expect(result.images).toEqual([
+    expect(result?.images).toEqual([
       {
         id: "image-1",
         url: "/cdn/shouts/cute.gif",

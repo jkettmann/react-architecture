@@ -9,12 +9,18 @@ async function getMe(api = UserApi) {
   return dtoToMe(meDto);
 }
 
-async function getUser(handle: string, api = UserApi) {
+async function getUser(handle?: string, api = UserApi) {
+  if (!handle) {
+    return null;
+  }
   const { data: userDto } = await api.getUser(handle);
   return dtoToUser(userDto);
 }
 
-async function getUserShouts(handle: string, api = UserApi) {
+async function getUserShouts(handle?: string, api = UserApi) {
+  if (!handle) {
+    return null;
+  }
   const { data: shoutDtos, included: imageDtos } =
     await api.getUserShouts(handle);
   const shouts = shoutDtos.map(dtoToShout);

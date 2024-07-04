@@ -1,36 +1,24 @@
-import { useEffect, useState } from "react";
-
+import { useGetFeed } from "@/application/queries/use-get-feed";
 import { LoadingView } from "@/components/loading";
 import { ShoutList } from "@/components/shout-list";
-import { Image } from "@/domain/media";
-import { Shout } from "@/domain/shout";
-import { User } from "@/domain/user";
-import FeedService from "@/infrastructure/feed";
 
 export function Feed() {
-  const [feed, setFeed] = useState<{
-    shouts: Shout[];
-    images: Image[];
-    users: User[];
-  }>();
-  const [hasError, setHasError] = useState(false);
+  const feed = useGetFeed();
 
-  useEffect(() => {
-    FeedService.getFeed()
-      .then((feed) => setFeed(feed))
-      .catch(() => setHasError(true));
-  }, []);
-
-  if (hasError) {
+  if (feed.isError) {
     return <div>An error occurred</div>;
   }
 
-  if (!feed) {
+  if (!feed.data) {
     return <LoadingView />;
   }
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col justify-center p-6 gap-6">
-      <ShoutList shouts={feed.shouts} users={feed.users} images={feed.images} />
+      <ShoutList
+        shouts={feed.data.shouts}
+        users={feed.data.users}
+        images={feed.data.images}
+      />
     </div>
   );
 }

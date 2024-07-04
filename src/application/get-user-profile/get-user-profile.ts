@@ -1,30 +1,18 @@
-import { useCallback } from "react";
-
-import UserService from "@/infrastructure/user";
+import { useGetUser } from "../queries/use-get-user";
+import { useGetUserShouts } from "../queries/use-get-user-shouts";
 
 interface GetUserProfileInput {
-  handle: string;
+  handle?: string;
 }
 
-const dependencies = {
-  getUser: UserService.getUser,
-  getUserShouts: UserService.getUserShouts,
-};
-
-export async function getUserProfile(
-  { handle }: GetUserProfileInput,
-  { getUser, getUserShouts }: typeof dependencies
-) {
-  const [user, { shouts, images }] = await Promise.all([
-    getUser(handle),
-    getUserShouts(handle),
-  ]);
-  return { user, shouts, images };
-}
-
-export function useGetUserProfile() {
-  return useCallback(
-    (input: GetUserProfileInput) => getUserProfile(input, dependencies),
-    []
-  );
+export function useGetUserProfile({ handle }: GetUserProfileInput) {
+  const user = useGetUser({ handle });
+  const userShouts = useGetUserShouts({ handle });
+  return {
+    user: user.data,
+    shouts: userShouts.data?.shouts,
+    images: userShouts.data?.images,
+    isLoading: user.isLoading || userShouts.isLoading,
+    error: user.error || userShouts.error,
+  };
 }

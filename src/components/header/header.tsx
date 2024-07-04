@@ -1,37 +1,20 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useLogout } from "@/application/mutations/use-logout";
+import { useGetMe } from "@/application/queries/use-get-me";
 import { LoginDialog } from "@/components/login-dialog";
 import { Button } from "@/components/ui/button";
-import { Me } from "@/domain/me";
-import AuthService from "@/infrastructure/auth";
-import UserService from "@/infrastructure/user";
+import { isAuthenticated } from "@/domain/me";
 
 export function Header() {
-  const [isLoadingMe, setIsLoadingMe] = useState(true);
-  const [isLoadingLogout, setIsLoadingLogout] = useState(false);
-  const [me, setMe] = useState<Me>();
-  const [hasError, setHasError] = useState(false);
+  const me = useGetMe();
+  const logout = useLogout();
 
-  useEffect(() => {
-    UserService.getMe()
-      .then((me) => setMe(me))
-      .catch(() => setHasError(true))
-      .finally(() => setIsLoadingMe(false));
-  }, []);
-
-  async function logout() {
-    setIsLoadingLogout(true);
-    await AuthService.logout();
-    setIsLoadingLogout(false);
-    window.location.reload();
-  }
-
-  if (hasError || !me) {
+  if (me.isError || !isAuthenticated(me.data)) {
     return (
       <div className="w-full flex justify-end items-center p-2">
         <LoginDialog>
-          <Button size="sm" disabled={isLoadingMe}>
+          <Button size="sm" disabled={me.isLoading}>
             Login
           </Button>
         </LoginDialog>
@@ -41,11 +24,19 @@ export function Header() {
 
   return (
     <div className="w-full flex justify-between p-2">
-      <Link className="flex items-center gap-2" to={`/user/${me.handle}`}>
-        <img className="w-8 h-8 rounded-full" src={me.avatar} alt={me.handle} />
-        <span className="font-semibold">{`@${me.handle}`}</span>
+      <Link className="flex items-center gap-2" to={`/user/${me.data.handle}`}>
+        <img
+          className="w-8 h-8 rounded-full"
+          src={me.data.avatar}
+          alt={me.data.handle}
+        />
+        <span className="font-semibold">{`@${me.data.handle}`}</span>
       </Link>
-      <Button size="sm" onClick={logout} disabled={isLoadingLogout}>
+      <Button
+        size="sm"
+        onClick={() => logout.mutate()}
+        disabled={logout.isPending}
+      >
         Logout
       </Button>
     </div>

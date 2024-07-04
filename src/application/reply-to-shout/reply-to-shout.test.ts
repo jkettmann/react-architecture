@@ -31,15 +31,13 @@ const mockRecipient = {
   followerIds: [],
 };
 
-const mockGetMe = vitest.fn().mockResolvedValue(mockMe);
-const mockGetUser = vitest.fn().mockResolvedValue(mockRecipient);
 const mockSaveImage = vitest.fn().mockResolvedValue({ id: imageId });
 const mockCreateShout = vitest.fn().mockResolvedValue({ id: newShoutId });
 const mockCreateReply = vitest.fn();
 
 const mockDependencies = {
-  getMe: mockGetMe,
-  getUser: mockGetUser,
+  me: mockMe,
+  recipient: mockRecipient,
   saveImage: mockSaveImage,
   createShout: mockCreateShout,
   createReply: mockCreateReply,
@@ -47,43 +45,37 @@ const mockDependencies = {
 
 describe("replyToShout", () => {
   beforeEach(() => {
-    Object.values(mockDependencies).forEach((mock) => mock.mockClear());
+    vitest.clearAllMocks();
   });
 
   it("should return an error if the user has made too many shouts", async () => {
-    mockGetMe.mockResolvedValueOnce({
-      ...mockMe,
-      numShoutsPastDay: MAX_NUM_SHOUTS_PER_DAY,
-    });
-
     const result = await replyToShout(
       { recipientHandle, shoutId, message, files },
-      mockDependencies
+      {
+        ...mockDependencies,
+        me: { ...mockMe, numShoutsPastDay: MAX_NUM_SHOUTS_PER_DAY },
+      }
     );
 
     expect(result).toEqual({ error: ErrorMessages.TooManyShouts });
   });
 
   it("should return an error if the recipient does not exist", async () => {
-    mockGetUser.mockResolvedValueOnce(undefined);
-
     const result = await replyToShout(
       { recipientHandle, shoutId, message, files },
-      mockDependencies
+      { ...mockDependencies, recipient: null }
     );
 
     expect(result).toEqual({ error: ErrorMessages.RecipientNotFound });
   });
 
   it("should return an error if the recipient has blocked the author", async () => {
-    mockGetUser.mockResolvedValueOnce({
-      ...mockRecipient,
-      blockedUserIds: [mockMe.id],
-    });
-
     const result = await replyToShout(
       { recipientHandle, shoutId, message, files },
-      mockDependencies
+      {
+        ...mockDependencies,
+        recipient: { ...mockRecipient, blockedUserIds: [mockMe.id] },
+      }
     );
 
     expect(result).toEqual({ error: ErrorMessages.AuthorBlockedByRecipient });
